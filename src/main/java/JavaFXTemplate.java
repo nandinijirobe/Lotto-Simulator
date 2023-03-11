@@ -5,15 +5,53 @@ import javafx.animation.SequentialTransition;
 import javafx.application.Application;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 
 
 public class JavaFXTemplate extends Application {
+	private Button playGameButton;
+	private Button menuButton;
+	private Button playAgainButton;
+	private Button exitButton;
+
+	private Button defaultThemeButton;
+	private Button pinkThemeButton;
+	private Button startDrawButton;
+	private Button quickPickButton;
+	private Button submitFormButton;
+	private Button closeWindowButton;
+	private Button displayRulesButton;
+	private Button checkOddsWinningButton;
+	private Button newLookButton;
+
+	private TextField displayTotalWinningGame;
+	private TextField instructionBoard;
+	private TextField display20RandomNums;
+	private TextField displayNumMatches;
+	private TextField displayMatchedNums;
+	private TextField displayDrawWinng;
+
+	private GridPane betCard;
+	private PlaySlip game;
+	private boolean hasGameStarted = false;
+
+
+	private ArrayList<String> defaultTheme;
+	private ArrayList<String> pinkTheme;
+
+	private PauseTransition pause;
+
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -25,38 +63,25 @@ public class JavaFXTemplate extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
 		primaryStage.setTitle("Welcome to JavaFX");
-		
-		 Rectangle rect = new Rectangle (100, 40, 100, 100);
-	     rect.setArcHeight(50);
-	     rect.setArcWidth(50);
-	     rect.setFill(Color.VIOLET);
 
-	     RotateTransition rt = new RotateTransition(Duration.millis(5000), rect);
-	     rt.setByAngle(270);
-	     rt.setCycleCount(4);
-	     rt.setAutoReverse(true);
-	     SequentialTransition seqTransition = new SequentialTransition (
-	         new PauseTransition(Duration.millis(500)),
-	         rt
-	     );
-	     seqTransition.play();
-	     
-	     FadeTransition ft = new FadeTransition(Duration.millis(5000), rect);
-	     ft.setFromValue(1.0);
-	     ft.setToValue(0.3);
-	     ft.setCycleCount(4);
-	     ft.setAutoReverse(true);
-
-	     ft.play();
-	     BorderPane root = new BorderPane();
-	     root.setCenter(rect);
-	     
-	     Scene scene = new Scene(root, 700,700);
-			primaryStage.setScene(scene);
-			primaryStage.show();
-		
-				
-		
+//	     Scene scene = new Scene(root, 700,700);
+//			primaryStage.setScene(scene);
+//			primaryStage.show();
 	}
 
+	public void introScene() {}
+
+	public void gameScene() {}
+
+	public void menuScreen() {}
+
+	public void rulesScreen() {}
+
+	public void oddsOfWinningScreen() {}
+
+	public void playOrExitScreen() {}
+
+	public void applyNewLook(ArrayList<String> themeStyle) {}
+
 }
+
