@@ -1,8 +1,11 @@
 import java.util.*;
 // Return the amount of money the player won based on the number of matches and spots (1, 4, 8, 10) they play per draw
 public class CalculateDrawWinningMoney {
-    static int oneSpotWinnings() {
-        return 2;  // 1 match
+    static int oneSpotWinnings(int totalNumMatch) {
+        if (totalNumMatch == 1) {
+            return 2;  // 1 match
+        }
+        return 0;
     }
 
     static int fourSpotWinnings(int totalNumMatch) {
@@ -53,18 +56,5 @@ public class CalculateDrawWinningMoney {
         return 0;  // 1-4 matches
     }
 
-    static ArrayList<Integer> findMatchedNums(HashSet<Integer> userNums, HashSet<Integer> gameNums) {
-        ArrayList<Integer> matchedNums = new ArrayList<>();
 
-        // Iterate through the gameNums to find a matched number with the userNums. If so, append that number to the array
-        for (Integer num : gameNums) {
-            if (userNums.contains(num)) {
-                matchedNums.add(num);
-            }
-        }
-
-        Collections.sort(matchedNums);  // Sort the matched numbers in ascending order
-
-        return matchedNums;
-    }
 }

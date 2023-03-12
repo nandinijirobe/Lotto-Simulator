@@ -2,19 +2,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import org.junit.jupiter.api.DisplayName;
-
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-
-class MyTest {
+class CalcDrawWinningsTest {
 
 	@Test
 	void oneSpotWinningsTest() {
-		assertEquals(2, CalculateDrawWinningMoney.oneSpotWinnings());
+		assertEquals(2, CalculateDrawWinningMoney.oneSpotWinnings(1));
+		assertEquals(0, CalculateDrawWinningMoney.oneSpotWinnings(0));
 	}
 
 	@Test
@@ -56,33 +49,33 @@ class MyTest {
 
 	}
 
-	@Test
-	void findMatchedNumsTest() {
-		HashSet<Integer> set1 = new HashSet<>();
-		HashSet<Integer> set2 = new HashSet<>();
-
-		// Populate set1
-		set1.add(10);
-		set1.add(3);
-		set1.add(2);
-		set1.add(6);
-		set1.add(34);
-
-		// Populate set2
-		set2.add(3);
-		set2.add(7);
-		set2.add(34);
-		set2.add(72);
-
-		ArrayList<Integer> rightMatchedNums = new ArrayList<>();  // 'Controlled' array
-		rightMatchedNums.add(3);
-		rightMatchedNums.add(34);
-
-		assertEquals(true, CalculateDrawWinningMoney.findMatchedNums(set1, set2).contains(3));
-		assertEquals(true, CalculateDrawWinningMoney.findMatchedNums(set1, set2).contains(34));
-		assertEquals(false, CalculateDrawWinningMoney.findMatchedNums(set1, set2).contains(10));
-
-		assertArrayEquals(rightMatchedNums.toArray(), CalculateDrawWinningMoney.findMatchedNums(set1, set2).toArray());  // Check if the arrays share the same element values
-	}
+//	@Test
+//	void findMatchedNumsTest() {
+//		HashSet<Integer> set1 = new HashSet<>();
+//		HashSet<Integer> set2 = new HashSet<>();
+//
+//		// Populate set1
+//		set1.add(10);
+//		set1.add(3);
+//		set1.add(2);
+//		set1.add(6);
+//		set1.add(34);
+//
+//		// Populate set2
+//		set2.add(3);
+//		set2.add(7);
+//		set2.add(34);
+//		set2.add(72);
+//
+//		ArrayList<Integer> rightMatchedNums = new ArrayList<>();  // 'Controlled' array
+//		rightMatchedNums.add(3);
+//		rightMatchedNums.add(34);
+//
+//		assertEquals(true, CalculateDrawWinningMoney.findMatchedNums(set1, set2).contains(3));
+//		assertEquals(true, CalculateDrawWinningMoney.findMatchedNums(set1, set2).contains(34));
+//		assertEquals(false, CalculateDrawWinningMoney.findMatchedNums(set1, set2).contains(10));
+//
+//		assertArrayEquals(rightMatchedNums.toArray(), CalculateDrawWinningMoney.findMatchedNums(set1, set2).toArray());  // Check if the arrays share the same element values
+//	}
 
 }
