@@ -4,6 +4,7 @@ import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
 import javafx.application.Application;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -26,6 +27,8 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+// TODO: Just noticed that you can't use the same button in two different scenes; it would only appear in one of them, but not the others.
+// TODO: I tried to comment it out in one scene such that it now appears on the other scene. Maybe, we might need to declare a new button, but w/ scripts attached to it. 3/13/23
 
 public class JavaFXTemplate extends Application {
 	private Button playGameButton;
@@ -48,7 +51,7 @@ public class JavaFXTemplate extends Application {
 	private TextField display20RandomNums;
 	private TextField displayNumMatches;
 	private TextField displayMatchedNums;
-	private TextField displayDrawWinng;
+	private TextField displayDrawWinning;
 
 	private GridPane betCard;
 	private PlaySlip game;
@@ -82,25 +85,50 @@ public class JavaFXTemplate extends Application {
 		exitButton = new Button("Exit Button");
 		closeWindowButton = new Button("X");
 
+		defaultThemeButton = new Button("Default");
+		pinkThemeButton = new Button("Pink-Red");
+
 		sceneMap = new HashMap<String, Scene>();  // Store all the scenes
 
 		// Create an instance of the game and switch to the gameplay scene
 		playGameButton.setOnAction(e-> {
-			game = new PlaySlip();
+//			game = new PlaySlip();
+			hasGameStarted = true;
 			primaryStage.setScene(sceneMap.get("gameplay"));
 
 		});
 
 		// Switch to the menu scene
-		menuButton.setOnAction(e-> {
-			primaryStage.setScene(sceneMap.get("menu"));
+		menuButton.setOnAction(e-> primaryStage.setScene(sceneMap.get("menu")));
+
+		// Display the rules in another screen
+		displayRulesButton.setOnAction(e-> primaryStage.setScene(sceneMap.get("rules")));
+
+		// Display the odds of winning in another screen
+		checkOddsWinningButton.setOnAction(e-> primaryStage.setScene(sceneMap.get("oddsOfWinning")));
+
+		// Look screen
+		newLookButton.setOnAction(e-> primaryStage.setScene(sceneMap.get("look")));
+
+		// Go to the previous screen after closing the menu screen that depend on whether the game have already started or not
+		closeWindowButton.setOnAction(e-> {
+			if (hasGameStarted) {
+				primaryStage.setScene(sceneMap.get("gameplay"));
+			} else {
+				primaryStage.setScene(sceneMap.get("intro"));
+			}
 		});
 
+		// Close the application window
+		exitButton.setOnAction(e-> Platform.exit());
 
 		// Put scenes in a hashmap
 		sceneMap.put("intro", createIntroScene());
 		sceneMap.put("gameplay", createGameScene());
 		sceneMap.put("menu", createMenuScreen());
+		sceneMap.put("rules", createRulesScreen());
+		sceneMap.put("oddsOfWinning", createOddsOfWinningScreen());
+		sceneMap.put("look", createLookScreen());
 
 		// This is what the user sees when opening the program
 		primaryStage.setScene(sceneMap.get("intro"));
@@ -191,23 +219,79 @@ public class JavaFXTemplate extends Application {
 
 	public Scene createRulesScreen() {
 		BorderPane pane = new BorderPane();
-		pane.setStyle("-fx-background-color: #7896D7");  // temp
+		pane.setStyle("-fx-background-color: #FF8787");  // temp
+
+		Text rulesTile = new Text("RULES");
+
+		Text rule1 = new Text("1. Select the number of spots (1, 4, 8, or 10) and drawings (1-4) to play. This cannot be changed once it begins.");
+		Text rule2 = new Text("2. Depending on the number of spots you pick, select that amount of numbers (1-80) on the grid. You cannot change it once the drawings begin.");
+		Text rule3 = new Text("3. For each draw, 20 random distinct numbers will be drawn, and you win money based on the number of matches you made with your selected numbers.");
+		// TODO: Feel free to modify/add more rules.
+
+		VBox paneCenter = new VBox(rulesTile, rule1, rule2, rule3);
+
+		// Adjust its arrangements/margins
+		paneCenter.setAlignment(Pos.CENTER);
+
+		// Add the elements onto the BorderPane
+		pane.setCenter(paneCenter);
+
 		return new Scene(pane, 850, 750);
 	}
 
 	public Scene createOddsOfWinningScreen() {
 		BorderPane pane = new BorderPane();
-		pane.setStyle("-fx-background-color: #7896D7");  // temp
-		return new Scene(pane, 850, 750);
-	}
+		pane.setStyle("-fx-background-color: #89B982");  // temp
 
-	public Scene createPlayOrExitScreen() {
-		BorderPane pane = new BorderPane();
-		pane.setStyle("-fx-background-color: #7896D7");  // temp
+		Text oddsTitle = new Text("ODDS OF WINNING");
+
+		VBox paneCenter = new VBox(oddsTitle);
+
+		// TODO: Add an image of all the odds of winning
+
+		// Adjust its arrangements/margins
+		paneCenter.setAlignment(Pos.CENTER);
+
+		// Add the elements onto the BorderPane
+		pane.setCenter(paneCenter);
+
+
 		return new Scene(pane, 850, 750);
 	}
 
 	public Scene createLookScreen() {
+		BorderPane pane = new BorderPane();
+		pane.setStyle("-fx-background-color: #89B982");  // temp
+
+		Text lookTitle = new Text("Choose a Theme Style");
+		lookTitle.setStyle("-fx-font: bold 75 serif;");
+		lookTitle.setUnderline(true);
+
+		defaultThemeButton.setStyle("-fx-font: bold 50 serif; -fx-background-color: #0CA789;");
+		pinkThemeButton.setStyle("-fx-font: bold 50 serif; -fx-background-color: #AC1E2D;");
+
+		HBox buttons = new HBox(defaultThemeButton, pinkThemeButton);
+		VBox paneCenter = new VBox(lookTitle, buttons);
+//		HBox paneRight = new HBox(closeWindowButton);
+
+		// Adjust its arrangements/margins
+		buttons.setAlignment(Pos.CENTER);
+		buttons.setSpacing(20);
+
+		paneCenter.setAlignment(Pos.CENTER);
+		paneCenter.setSpacing(20);
+
+//		paneRight.setAlignment(Pos.CENTER_RIGHT);
+//		paneRight.setMargin(closeWindowButton, new Insets(15));
+
+		// Add the elements onto the BorderPane
+		pane.setCenter(paneCenter);
+//		pane.setTop(paneRight);
+
+		return new Scene(pane, 850, 750);
+	}
+
+	public Scene createPlayOrExitScreen() {
 		BorderPane pane = new BorderPane();
 		pane.setStyle("-fx-background-color: #7896D7");  // temp
 		return new Scene(pane, 850, 750);

@@ -1,8 +1,0 @@
--------------------------------------------------------------------------------
-Test set: MyTest
--------------------------------------------------------------------------------
-<<<<<<< HEAD
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.034 s - in MyTest
-=======
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.042 s - in MyTest
->>>>>>> 3eb3cb854c86b30c77089d7ff61204ae5dbe3319
