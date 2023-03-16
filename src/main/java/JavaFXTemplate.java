@@ -37,7 +37,6 @@ public class JavaFXTemplate extends Application {
 	private Button playGameButton;
 	private Button menuButton1, menuButton2;
 	private Button playAgainButton;
-	private Button exitButton;
 	private Button defaultThemeButton, pinkThemeButton;
 	private Button startDrawButton;
 	private Button quickPickButton;
@@ -94,7 +93,6 @@ public class JavaFXTemplate extends Application {
 		displayRulesButton = new Button("Display Rules");
 		checkOddsWinningButton = new Button("Show Odds of Winning");
 		newLookButton = new Button("New Look");
-		exitButton = new Button("Exit Button");
 
 		closeMenuButton = new Button("X");
 		closeRulesButton = new Button("X");
@@ -103,6 +101,8 @@ public class JavaFXTemplate extends Application {
 
 		defaultThemeButton = new Button("Default");
 		pinkThemeButton = new Button("Pink-Red");
+
+		playAgainButton = new Button("Play Again");
 
 		sceneMap = new HashMap<String, Scene>();  // Store all the scenes
 
@@ -173,9 +173,6 @@ public class JavaFXTemplate extends Application {
 			}
 		});
 
-		// Close the application window
-		exitButton.setOnAction(e-> Platform.exit());
-
 		// Put scenes in a hashmap
 		sceneMap.put("intro", createIntroScene(defaultTheme));
 		sceneMap.put("gameplay", createGameScene());
@@ -183,6 +180,7 @@ public class JavaFXTemplate extends Application {
 		sceneMap.put("rules", createRulesScreen());
 		sceneMap.put("oddsOfWinning", createOddsOfWinningScreen());
 		sceneMap.put("look", createLookScreen());
+		sceneMap.put("ending", createPlayOrExitScreen());
 
 		// This is what the user sees when opening the program
 		primaryStage.setScene(sceneMap.get("intro"));
@@ -228,6 +226,10 @@ public class JavaFXTemplate extends Application {
 		Text menuTitle = new Text("MENU");
 		menuTitle.setStyle("-fx-font: bold 100 serif;");
 		menuTitle.setUnderline(true);
+
+		// Close the application window
+		Button exitButton = new Button("Exit Button");
+		exitButton.setOnAction(e-> Platform.exit());
 
 		// Customize the buttons
 		displayRulesButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 600px; -fx-font: bold 36 serif; -fx-background-radius: 10;");
@@ -357,7 +359,30 @@ public class JavaFXTemplate extends Application {
 
 	public Scene createPlayOrExitScreen() {
 		BorderPane pane = new BorderPane();
-		pane.setStyle("-fx-background-color: #7896D7");  // temp
+		pane.setStyle("-fx-background-color: #388251");
+
+		Text endTitle = new Text("Want to Play Again?");
+		endTitle.setStyle("-fx-font: bold 75 serif;");
+
+		// Close the application window
+		Button exitGameButton = new Button("Exit The Game");
+		exitGameButton.setOnAction(e-> Platform.exit());
+
+		playAgainButton.setStyle("-fx-font: bold 50 serif; -fx-background-color: #CEE741;");
+		exitGameButton.setStyle("-fx-font: bold 50 serif; -fx-background-color: #CEE741;");
+
+		HBox buttons = new HBox(playAgainButton, exitGameButton);
+		VBox paneCenter = new VBox(endTitle, buttons);
+
+		// Adjust its arrangements/margins
+		buttons.setAlignment(Pos.CENTER);
+		buttons.setSpacing(30);
+
+		paneCenter.setAlignment(Pos.CENTER);
+		paneCenter.setSpacing(30);
+
+		pane.setCenter(paneCenter);
+
 		return new Scene(pane, 850, 750);
 	}
 
