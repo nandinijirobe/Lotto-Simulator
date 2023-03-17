@@ -5,6 +5,8 @@ import javafx.animation.SequentialTransition;
 import javafx.application.Application;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -20,6 +22,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 //import org.w3c.dom.Text;
@@ -32,7 +35,7 @@ import java.util.HashMap;
 
 public class JavaFXTemplate extends Application {
 	private Button playGameButton;
-	private Button menuButton;
+	private Button menuButton1, menuButton2;
 	private Button playAgainButton;
 	private Button exitButton;
 	private Button defaultThemeButton;
@@ -40,7 +43,7 @@ public class JavaFXTemplate extends Application {
 	private Button startDrawButton;
 	private Button quickPickButton;
 	private Button submitFormButton;
-	private Button closeWindowButton;
+	private Button closeMenuButton, closeRulesButton, closeOddsButton, closeLookButton;
 	private Button displayRulesButton;
 	private Button checkOddsWinningButton;
 	private Button newLookButton;
@@ -57,11 +60,20 @@ public class JavaFXTemplate extends Application {
 	private boolean hasGameStarted = false;
 
 
-	private ArrayList<String> defaultTheme;
-	private ArrayList<String> pinkTheme;
+	// Each theme style contains the colors' hex codes
+	private String[]defaultTheme = new String[] {
+			"#94B49F",
+			"#E5E3C9"
+	};
+	private String[]pinkTheme = new String[] {
+			"#F24726",
+			"#FF8787"
+	};
 
 	private PauseTransition pause;
 	private HashMap<String, Scene> sceneMap;
+
+	private EventHandler<ActionEvent> closeMenuOptionHandler;
 
 
 	public static void main(String[] args) {
@@ -77,15 +89,22 @@ public class JavaFXTemplate extends Application {
 
 		// Declaring variables
 		playGameButton = new Button("PLAY THE GAME");
-		menuButton = new Button("MENU");
+		menuButton1 = new Button("MENU");
+		menuButton2 = new Button("MENU");
+
 		displayRulesButton = new Button("Display Rules");
 		checkOddsWinningButton = new Button("Show Odds of Winning");
 		newLookButton = new Button("New Look");
-		exitButton = new Button("Exit Button");
-		closeWindowButton = new Button("X");
+
+		closeMenuButton = new Button("X");
+		closeRulesButton = new Button("X");
+		closeOddsButton = new Button("X");
+		closeLookButton = new Button("X");
 
 		defaultThemeButton = new Button("Default");
 		pinkThemeButton = new Button("Pink-Red");
+
+		playAgainButton = new Button("Play Again");
 
 		sceneMap = new HashMap<String, Scene>();  // Store all the scenes
 
@@ -98,7 +117,20 @@ public class JavaFXTemplate extends Application {
 		});
 
 		// Switch to the menu scene
-		menuButton.setOnAction(e-> primaryStage.setScene(sceneMap.get("menu")));
+		menuButton1.setOnAction(e-> primaryStage.setScene(sceneMap.get("menu")));
+		menuButton2.setOnAction(e-> primaryStage.setScene(sceneMap.get("menu")));
+
+		// Declare a handler that the player can return back to the menu scene from the menu option scene
+		closeMenuOptionHandler = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				primaryStage.setScene(sceneMap.get("menu"));
+			}
+		};
+
+		closeRulesButton.setOnAction(closeMenuOptionHandler);
+		closeOddsButton.setOnAction(closeMenuOptionHandler);
+		closeLookButton.setOnAction(closeMenuOptionHandler);
 
 		// Display the rules in another screen
 		displayRulesButton.setOnAction(e-> primaryStage.setScene(sceneMap.get("rules")));
@@ -109,8 +141,11 @@ public class JavaFXTemplate extends Application {
 		// Look screen
 		newLookButton.setOnAction(e-> primaryStage.setScene(sceneMap.get("look")));
 
-		// Go to the previous screen after closing the menu screen that depend on whether the game have already started or not
-		closeWindowButton.setOnAction(e-> {
+		// Change the look of the intro screen and the gameplay screen w/ the default theme colors (green)
+		defaultThemeButton.setOnAction(e-> {
+			sceneMap.put("intro", createIntroScene(defaultTheme));
+			// TODO: need to change colors for the gameplay (but cannot restart)
+
 			if (hasGameStarted) {
 				primaryStage.setScene(sceneMap.get("gameplay"));
 			} else {
@@ -118,58 +153,58 @@ public class JavaFXTemplate extends Application {
 			}
 		});
 
-		// Close the application window
-		exitButton.setOnAction(e-> Platform.exit());
+		// Change the look of the intro screen and the gameplay screen w/ the pink-red theme colors
+		pinkThemeButton.setOnAction(e-> {
+			sceneMap.put("intro", createIntroScene(pinkTheme));
+			// TODO: need to change colors for the gameplay (but cannot restart)
+
+			if (hasGameStarted) {
+				primaryStage.setScene(sceneMap.get("gameplay"));
+			} else {
+				primaryStage.setScene(sceneMap.get("intro"));
+			}
+		});
+
+
+		// Go to the previous screen after closing the menu screen that depend on whether the game have already started or not
+		closeMenuButton.setOnAction(e-> {
+			if (hasGameStarted) {
+				primaryStage.setScene(sceneMap.get("gameplay"));
+			} else {
+				primaryStage.setScene(sceneMap.get("intro"));
+			}
+		});
 
 		// Put scenes in a hashmap
-		sceneMap.put("intro", createIntroScene());
+		sceneMap.put("intro", createIntroScene(defaultTheme));
 		sceneMap.put("gameplay", createGameScene());
 		sceneMap.put("menu", createMenuScreen());
 		sceneMap.put("rules", createRulesScreen());
 		sceneMap.put("oddsOfWinning", createOddsOfWinningScreen());
 		sceneMap.put("look", createLookScreen());
+		sceneMap.put("ending", createPlayOrExitScreen());
 
 		// This is what the user sees when opening the program
 		primaryStage.setScene(sceneMap.get("intro"));
 		primaryStage.show();
 	}
 
-	public Scene createIntroScene() {
+	public Scene createIntroScene(String[] themeColors) {
 		BorderPane pane = new BorderPane();
-		pane.setStyle("-fx-background-color: #E5E3C9");
+		pane.setStyle("-fx-background-color: " + themeColors[1]);
 
 		Text gameTitle = new Text("KENO");
 		gameTitle.setStyle("-fx-font: bold 150 serif;");
 
-//		Circle oneCircle = new Circle();
-//		oneCircle.setRadius(45.0f);
-//		oneCircle.setFill(Paint.valueOf("#89B982"));
-//
-//		Circle twoCircle = new Circle();
-//		twoCircle.setRadius(45.0f);
-//		twoCircle.setFill(Paint.valueOf("#8AA3BD"));
-//
-//		Circle threeCircle = new Circle();
-//		threeCircle.setRadius(45.0f);
-//		threeCircle.setFill(Paint.valueOf("#A87D7D"));
-//
-//		Circle fourCircle = new Circle();
-//		fourCircle.setRadius(45.0f);
-//		fourCircle.setFill(Paint.valueOf("#FF8787"));
-
-
 		//Customize the buttons (TODO: maybe move the background color to the main method b/c of newlook)
-		playGameButton.setStyle("-fx-pref-height: 90px; -fx-pref-width: 600px; -fx-font: bold 36 serif; -fx-background-radius: 10; -fx-background-color: #94B49F");
-		menuButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 95px; -fx-font: bold 20 serif; -fx-background-radius: 10; -fx-background-color: #94B49F");
-
-//		HBox circles = new HBox(oneCircle, twoCircle, threeCircle, fourCircle);
-//		circles.setAlignment(Pos.CENTER);
+		playGameButton.setStyle("-fx-pref-height: 90px; -fx-pref-width: 600px; -fx-font: bold 36 serif; -fx-background-radius: 10; -fx-background-color: " + themeColors[0]);
+		menuButton1.setStyle("-fx-pref-height: 55px; -fx-pref-width: 95px; -fx-font: bold 20 serif; -fx-background-radius: 10; -fx-background-color: " + themeColors[0]);
 
 		VBox paneCenter = new VBox(gameTitle, playGameButton);
-		HBox paneRight = new HBox(menuButton);
+		HBox paneRight = new HBox(menuButton1);
 
 		// Adjust its arrangements/margins
-		paneRight.setMargin(menuButton, new Insets(15));
+		paneRight.setMargin(menuButton1, new Insets(15));
 		paneCenter.setAlignment(Pos.CENTER);
 		paneRight.setAlignment(Pos.TOP_RIGHT);
 
@@ -211,8 +246,8 @@ public class JavaFXTemplate extends Application {
 //		}
 //		pane.setLeft(leftSide);
 //
-//		return new Scene(pane, 850, 750);
-//	}
+		return new Scene(pane, 850, 750);
+	}
 
 	public Scene createMenuScreen() {
 		BorderPane pane = new BorderPane();
@@ -222,20 +257,24 @@ public class JavaFXTemplate extends Application {
 		menuTitle.setStyle("-fx-font: bold 100 serif;");
 		menuTitle.setUnderline(true);
 
+		// Close the application window
+		Button exitButton = new Button("Exit Button");
+		exitButton.setOnAction(e-> Platform.exit());
+
 		// Customize the buttons
 		displayRulesButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 600px; -fx-font: bold 36 serif; -fx-background-radius: 10;");
 		checkOddsWinningButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 600px; -fx-font: bold 36 serif; -fx-background-radius: 10;");
 		newLookButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 600px; -fx-font: bold 36 serif; -fx-background-radius: 10;");
 		exitButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 600px; -fx-font: bold 36 serif; -fx-background-radius: 10;");
-		closeWindowButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 55px; -fx-font: bold 36 serif; -fx-background-radius: 10; -fx-background-color: #6584C8");
+		closeMenuButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 55px; -fx-font: bold 36 serif; -fx-background-radius: 10; -fx-background-color: #6584C8");
 
 		VBox paneCenter = new VBox(15, menuTitle, displayRulesButton, checkOddsWinningButton, newLookButton, exitButton);
-		HBox paneRight = new HBox(closeWindowButton);
+		HBox paneRight = new HBox(closeMenuButton);
 
 		// Adjust its arrangements/margins
 		paneCenter.setAlignment(Pos.CENTER);
 		paneRight.setAlignment(Pos.CENTER_RIGHT);
-		paneRight.setMargin(closeWindowButton, new Insets(15));
+		paneRight.setMargin(closeMenuButton, new Insets(15));
 
 		// Add the elements onto the BorderPane
 		pane.setCenter(paneCenter);
@@ -248,20 +287,40 @@ public class JavaFXTemplate extends Application {
 		BorderPane pane = new BorderPane();
 		pane.setStyle("-fx-background-color: #FF8787");  // temp
 
-		Text rulesTile = new Text("RULES");
+		Text rulesTitle = new Text("RULES");
+		rulesTitle.setStyle("-fx-font: bold 75 serif;");
+		rulesTitle.setUnderline(true);
 
-		Text rule1 = new Text("1. Select the number of spots (1, 4, 8, or 10) and drawings (1-4) to play. This cannot be changed once it begins.");
-		Text rule2 = new Text("2. Depending on the number of spots you pick, select that amount of numbers (1-80) on the grid. You cannot change it once the drawings begin.");
-		Text rule3 = new Text("3. For each draw, 20 random distinct numbers will be drawn, and you win money based on the number of matches you made with your selected numbers.");
+		Text rule1 = new Text("Select the number of spots (1, 4, 8, or 10) and drawings (1-4) to play. This cannot be changed once it begins.");
+		Text rule2 = new Text("Depending on the number of spots you pick, select that amount of numbers (1-80) on the grid. You cannot change it once the drawings begin.");
+		Text rule3 = new Text("For each draw, 20 random distinct numbers will be drawn, and you win money based on the number of matches you made with your selected numbers.");
 		// TODO: Feel free to modify/add more rules.
 
-		VBox paneCenter = new VBox(rulesTile, rule1, rule2, rule3);
+		rule1.setStyle("-fx-font: 25 serif;");
+		rule1.setWrappingWidth(840);
+		rule1.setTextAlignment(TextAlignment.CENTER);
+		rule2.setStyle("-fx-font: 25 serif;");
+		rule2.setWrappingWidth(840);
+		rule2.setTextAlignment(TextAlignment.CENTER);
+		rule3.setStyle("-fx-font: 25 serif;");
+		rule3.setWrappingWidth(840);
+		rule3.setTextAlignment(TextAlignment.CENTER);
+
+		closeRulesButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 55px; -fx-font: bold 36 serif; -fx-background-radius: 10; -fx-background-color: #E77070");
+
+		VBox paneCenter = new VBox(rulesTitle, rule1, rule2, rule3);
+		HBox paneRight = new HBox(closeRulesButton);
 
 		// Adjust its arrangements/margins
 		paneCenter.setAlignment(Pos.CENTER);
+		paneCenter.setSpacing(12);
+
+		paneRight.setAlignment(Pos.CENTER_RIGHT);
+		paneRight.setMargin(closeRulesButton, new Insets(15));
 
 		// Add the elements onto the BorderPane
 		pane.setCenter(paneCenter);
+		pane.setTop(paneRight);
 
 		return new Scene(pane, 850, 750);
 	}
@@ -271,16 +330,25 @@ public class JavaFXTemplate extends Application {
 		pane.setStyle("-fx-background-color: #89B982");  // temp
 
 		Text oddsTitle = new Text("ODDS OF WINNING");
+		oddsTitle.setStyle("-fx-font: bold 75 serif;");
+		oddsTitle.setUnderline(true);
+
+		closeOddsButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 55px; -fx-font: bold 36 serif; -fx-background-radius: 10; -fx-background-color: #6AA761");
 
 		VBox paneCenter = new VBox(oddsTitle);
+		HBox paneRight = new HBox(closeOddsButton);
 
 		// TODO: Add an image of all the odds of winning
 
 		// Adjust its arrangements/margins
 		paneCenter.setAlignment(Pos.CENTER);
 
+		paneRight.setAlignment(Pos.CENTER_RIGHT);
+		paneRight.setMargin(closeOddsButton, new Insets(15));
+
 		// Add the elements onto the BorderPane
 		pane.setCenter(paneCenter);
+		pane.setTop(paneRight);
 
 
 		return new Scene(pane, 850, 750);
@@ -296,10 +364,11 @@ public class JavaFXTemplate extends Application {
 
 		defaultThemeButton.setStyle("-fx-font: bold 50 serif; -fx-background-color: #0CA789;");
 		pinkThemeButton.setStyle("-fx-font: bold 50 serif; -fx-background-color: #AC1E2D;");
+		closeLookButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 55px; -fx-font: bold 36 serif; -fx-background-radius: 10; -fx-background-color: #6AA761");
 
 		HBox buttons = new HBox(defaultThemeButton, pinkThemeButton);
 		VBox paneCenter = new VBox(lookTitle, buttons);
-//		HBox paneRight = new HBox(closeWindowButton);
+		HBox paneRight = new HBox(closeLookButton);
 
 		// Adjust its arrangements/margins
 		buttons.setAlignment(Pos.CENTER);
@@ -308,22 +377,48 @@ public class JavaFXTemplate extends Application {
 		paneCenter.setAlignment(Pos.CENTER);
 		paneCenter.setSpacing(20);
 
-//		paneRight.setAlignment(Pos.CENTER_RIGHT);
-//		paneRight.setMargin(closeWindowButton, new Insets(15));
+		paneRight.setAlignment(Pos.CENTER_RIGHT);
+		paneRight.setMargin(closeLookButton, new Insets(15));
 
 		// Add the elements onto the BorderPane
 		pane.setCenter(paneCenter);
-//		pane.setTop(paneRight);
+		pane.setTop(paneRight);
 
 		return new Scene(pane, 850, 750);
 	}
 
 	public Scene createPlayOrExitScreen() {
 		BorderPane pane = new BorderPane();
-		pane.setStyle("-fx-background-color: #7896D7");  // temp
+		pane.setStyle("-fx-background-color: #388251");
+
+		Text endTitle = new Text("Want to Play Again?");
+		endTitle.setStyle("-fx-font: bold 75 serif;");
+
+		// Close the application window
+		Button exitGameButton = new Button("Exit The Game");
+		exitGameButton.setOnAction(e-> Platform.exit());
+
+		playAgainButton.setStyle("-fx-font: bold 50 serif; -fx-background-color: #CEE741;");
+		exitGameButton.setStyle("-fx-font: bold 50 serif; -fx-background-color: #CEE741;");
+
+		HBox buttons = new HBox(playAgainButton, exitGameButton);
+		VBox paneCenter = new VBox(endTitle, buttons);
+
+		// Adjust its arrangements/margins
+		buttons.setAlignment(Pos.CENTER);
+		buttons.setSpacing(30);
+
+		paneCenter.setAlignment(Pos.CENTER);
+		paneCenter.setSpacing(30);
+
+		pane.setCenter(paneCenter);
+
 		return new Scene(pane, 850, 750);
 	}
 	public void applyNewLook(ArrayList<String> themeStyle) {}
+
+	public void applyNewLook(String[]themeStyle) {
+	}
 
 
 
