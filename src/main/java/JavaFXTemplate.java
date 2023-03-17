@@ -35,7 +35,6 @@ public class JavaFXTemplate extends Application {
 	private Button menuButton;
 	private Button playAgainButton;
 	private Button exitButton;
-
 	private Button defaultThemeButton;
 	private Button pinkThemeButton;
 	private Button startDrawButton;
@@ -184,8 +183,36 @@ public class JavaFXTemplate extends Application {
 	public Scene createGameScene() {
 		BorderPane pane = new BorderPane();
 		pane.setStyle("-fx-background-color: #FF8787");  // Temp
-		return new Scene(pane, 850, 750);
-	}
+
+		// left components
+		displayTotalWinningGame = new TextField("Winning Game Total: XXX");
+		betCard = new GridPane();
+		quickPickButton = new Button("Quick Pick");
+		TextField startDrawNo = new TextField("Start Draw #: XXX");
+
+		// right components
+		instructionBoard = new TextField("Instruction Board");
+
+		display20RandomNums = new TextField("20 Random Numbers");
+		displayNumMatches = new TextField("No. of matches");
+		displayMatchedNums = new TextField("Numbers matched: XXX");
+		displayDrawWinning = new TextField("How much they earned this draw:");
+
+
+//		HBox leftBottom = new HBox(quickPickButton, startDrawNo);
+//		VBox leftSide = new VBox(winGameTotal, betCard, leftBottom);
+//
+//		int count = 0;
+//		for (int row = 0; row < 10 ; row++) {
+//			for (int col = 0; col < 8; col++) {
+//				betCard.add(new Button(String.valueOf(count)), col, row, 1, 1);
+//				count++;
+//			}
+//		}
+//		pane.setLeft(leftSide);
+//
+//		return new Scene(pane, 850, 750);
+//	}
 
 	public Scene createMenuScreen() {
 		BorderPane pane = new BorderPane();
@@ -296,8 +323,9 @@ public class JavaFXTemplate extends Application {
 		pane.setStyle("-fx-background-color: #7896D7");  // temp
 		return new Scene(pane, 850, 750);
 	}
-
 	public void applyNewLook(ArrayList<String> themeStyle) {}
+
+
 
 }
 
