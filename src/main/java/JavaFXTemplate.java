@@ -10,7 +10,11 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -26,7 +30,6 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 // TODO: Just noticed that you can't use the same button in two different scenes; it would only appear in one of them, but not the others.
 // TODO: I tried to comment it out in one scene such that it now appears on the other scene. Maybe, we might need to declare a new button, but w/ scripts attached to it. 3/13/23
 
@@ -34,8 +37,10 @@ public class JavaFXTemplate extends Application {
 	private Button playGameButton;
 	private Button menuButton1, menuButton2;
 	private Button playAgainButton;
-	private Button defaultThemeButton, pinkThemeButton;
-	private Button startDrawButton;
+	private Button exitButton;
+	private Button defaultThemeButton;
+	private Button pinkThemeButton;
+	private Button startDrawButton; // what is this for?
 	private Button quickPickButton;
 	private Button submitFormButton;
 	private Button closeMenuButton, closeRulesButton, closeOddsButton, closeLookButton;
@@ -43,14 +48,17 @@ public class JavaFXTemplate extends Application {
 	private Button checkOddsWinningButton;
 	private Button newLookButton;
 
-	private TextField displayTotalWinningGame;
-	private TextField instructionBoard;
-	private TextField display20RandomNums;
-	private TextField displayNumMatches;
-	private TextField displayMatchedNums;
-	private TextField displayDrawWinning;
+	private Text startDrawNum;
+	private Text displayTotalWinningGame;
+	private Text instructionBoard;
+	private Text display20RandomNums;
+	private Text displayNumMatches;
+	private Text displayMatchedNums;
+	private Text displayDrawWinning;
 
 	private GridPane betCard;
+	private GridPane spotsToPlay;
+	private GridPane drawsToPlay;
 	private PlaySlip game;
 	private boolean hasGameStarted = false;
 
@@ -212,9 +220,140 @@ public class JavaFXTemplate extends Application {
 	}
 
 	public Scene createGameScene() {
+
 		BorderPane pane = new BorderPane();
-		pane.setStyle("-fx-background-color: #FF8787");  // Temp
-		return new Scene(pane, 850, 750);
+		pane.setStyle("-fx-background-color: #E5E3C9");
+
+		// left components
+		betCard = new GridPane();
+		quickPickButton = new Button("Quick Pick");
+		quickPickButton.setStyle("-fx-background-color: #A87D7D; -fx-font: bold 15 Helvetica;  -fx-min-width: 240; -fx-min-height: 50; -fx-text-fill: black");
+
+		startDrawNum = new Text("Draw No: XXX");
+		StackPane startDrawNumFlow = new StackPane(startDrawNum);
+		startDrawNumFlow.setStyle("-fx-background-color: #A87D7D; -fx-font: bold 15 Helvetica;  -fx-min-width: 240; -fx-min-height: 50; -fx-alignment: center; -fx-border-width: 10; -fx-background-radius: 5;" );
+
+		displayTotalWinningGame = new Text("Winning Game Total: XXX");
+		StackPane displayTotalWinningGameFlow = new StackPane(displayTotalWinningGame);
+		displayTotalWinningGameFlow.setStyle("-fx-background-color: #E2F0E7; -fx-font: bold 15 Helvetica;  -fx-min-width: 480; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
+
+		// left arrangement
+		HBox leftBottom = new HBox(quickPickButton, startDrawNumFlow);
+		VBox leftSide = new VBox(displayTotalWinningGameFlow, betCard, leftBottom);
+		leftBottom.setMargin(quickPickButton, new Insets(10));
+		leftBottom.setMargin(startDrawNumFlow, new Insets(10));
+		leftSide.setMargin(displayTotalWinningGameFlow, new Insets(10));
+		leftSide.setMargin(betCard, new Insets(10));
+
+		Text formText1 = new Text("Select the Number of Spots to Play");
+		StackPane formText1Pane = new StackPane(formText1);
+		formText1Pane.setStyle("-fx-background-color: #E2F0E7; -fx-font: bold 15 Helvetica;  -fx-min-width: 80; -fx-min-height: 30; -fx-alignment: center; -fx-border-width: 30;");
+
+		Text formText2 = new Text("Select the Number of Drawings");
+		StackPane formText2Pane = new StackPane(formText2);
+		formText2Pane.setStyle("-fx-background-color: #E2F0E7; -fx-font: bold 15 Helvetica;  -fx-min-width: 80; -fx-min-height: 30; -fx-alignment: center; -fx-border-width: 30;");
+
+		submitFormButton = new Button ("Submit");
+		submitFormButton.setStyle("-fx-pref-height: 20px; -fx-pref-width: 95px; -fx-font: bold 15 Helvetica; -fx-background-color: #89B982;");
+		menuButton2.setStyle("-fx-pref-height: 55px; -fx-pref-width: 95px; -fx-font: bold 20 serif; -fx-background-radius: 10; -fx-background-color: #89B982;");
+
+		spotsToPlay = new GridPane();
+		drawsToPlay = new GridPane();
+
+		int count2 = 1;
+		for (int row = 0; row < 1 ; row++) {
+			for (int col = 0; col < 4; col++) {
+				Button gridButton1 = new Button(String.valueOf(count2));
+				Button gridButton2 = new Button(String.valueOf(count2));
+				gridButton1.setStyle("-fx-min-height: 45px; -fx-min-width: 80px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #E2F0E7; -fx-border-color: #B4CFB0; -fx-border-width:5;");
+				gridButton2.setStyle("-fx-min-height: 45px; -fx-min-width: 80px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #E2F0E7; -fx-border-color: #B4CFB0; -fx-border-width:5;");
+				spotsToPlay.add(gridButton1, col, row, 1, 1);
+				drawsToPlay.add(gridButton2, col, row, 1, 1);
+				count2++;
+			}
+		}
+
+		VBox spotsBox = new VBox(formText1Pane, spotsToPlay);
+		VBox drawingsBox = new VBox(formText2Pane, drawsToPlay);
+		HBox spotsNdrawings = new HBox(spotsBox, drawingsBox);
+		HBox submitBox = new HBox(submitFormButton);
+		submitBox.setAlignment(Pos.CENTER);
+		VBox setupForm = new VBox(spotsNdrawings, submitBox);
+		setupForm.setStyle("-fx-background-color: #E2F0E7;");
+
+
+		spotsBox.setMargin(spotsToPlay, new Insets(10));
+		drawingsBox.setMargin(drawsToPlay, new Insets(10));
+		spotsBox.setMargin(formText1, new Insets(10));
+		drawingsBox.setMargin(formText2, new Insets(10));
+		submitBox.setMargin(submitFormButton, new Insets(10));
+
+		instructionBoard = new Text("Instruction Board");
+		StackPane instructionBoardFlow = new StackPane(instructionBoard);
+		instructionBoardFlow.setStyle("-fx-background-color: #B4CFB0; -fx-font: bold 15 Helvetica;  -fx-min-width: 240; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
+
+		display20RandomNums = new Text("20 Random Numbers");
+		StackPane display20RandomNumsFlow = new StackPane(display20RandomNums);
+		display20RandomNumsFlow.setStyle("-fx-background-color: #929F97; -fx-font: bold 15 Helvetica;  -fx-min-width: 60; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
+
+		displayNumMatches = new Text("Number of matches: XXXXXXX");
+		displayNumMatches.setWrappingWidth(200);
+		displayNumMatches.setTextAlignment(TextAlignment.CENTER);
+		StackPane displayNumMatchesFlow = new StackPane(displayNumMatches);
+		displayNumMatchesFlow.setStyle("-fx-background-color: #E2F0E7; -fx-border-insets:20; -fx-font: bold 15 Helvetica;  -fx-min-width: 160; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
+
+		displayMatchedNums = new Text("Numbers matched: XXXXXXX");
+		displayMatchedNums.setWrappingWidth(200);
+		displayMatchedNums.setTextAlignment(TextAlignment.CENTER);
+		StackPane displayMatchedNumsFlow = new StackPane(displayMatchedNums);
+		displayMatchedNumsFlow.setStyle("-fx-background-color: #E2F0E7;  -fx-border-insets:20; -fx-font: bold 15 Helvetica;  -fx-min-width: 160; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
+
+		displayDrawWinning = new Text("Current Draw Winnings: XXXXXXX");
+		displayDrawWinning.setWrappingWidth(200);
+		displayDrawWinning.setTextAlignment(TextAlignment.CENTER);
+		StackPane displayDrawWinningFlow = new StackPane(displayDrawWinning);
+		displayDrawWinningFlow.setStyle("-fx-background-color: #E2F0E7;  -fx-border-insets:20; -fx-font: bold 15 Helvetica;  -fx-min-width: 160; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
+
+		// right arrangement
+		HBox rightTop = new HBox(menuButton2);
+		rightTop.setMargin(menuButton2, new Insets(10));
+		rightTop.setAlignment(Pos.TOP_RIGHT);
+
+		HBox rightBottom = new HBox(displayNumMatchesFlow, displayMatchedNumsFlow, displayDrawWinningFlow);
+		VBox rightSide = new VBox(rightTop, instructionBoardFlow, setupForm, display20RandomNumsFlow, rightBottom);
+		rightBottom.setMargin(displayNumMatchesFlow, new Insets(10));
+		rightBottom.setMargin(displayMatchedNumsFlow, new Insets(10));
+		rightBottom.setMargin(displayDrawWinningFlow, new Insets(10));
+		rightSide.setMargin(instructionBoardFlow, new Insets(10));
+		rightSide.setMargin(display20RandomNumsFlow, new Insets(10));
+		rightSide.setAlignment(Pos.CENTER);
+
+		int count = 1;
+		for (int row = 0; row < 8 ; row++) {
+			for (int col = 0; col < 10; col++) {
+				Button gridButton = new Button(String.valueOf(count));
+				gridButton.setStyle("-fx-min-height: 45px; -fx-min-width: 50px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #E2F0E7; -fx-border-color: #B4CFB0; -fx-border-width:5;");
+				betCard.add(gridButton, col, row, 1, 1);
+//				gridButton.setOnAction(e->{
+//					System.out.println(gridButton.getText());
+//				});
+				count++;
+			}
+		}
+
+		HBox gameBoard = new HBox(leftSide, rightSide);
+		gameBoard.setAlignment(Pos.CENTER);
+
+		pane.setCenter(gameBoard);
+		pane.setMargin(gameBoard, new Insets(100));
+
+		// Scroll through the whole scene's contents
+		ScrollPane scroll = new ScrollPane();
+		scroll.setContent(pane);
+		scroll.setFitToHeight(true);
+		scroll.setFitToWidth(true);
+
+		return new Scene(scroll, 850, 750);
 	}
 
 	public Scene createMenuScreen() {
@@ -544,9 +683,12 @@ public class JavaFXTemplate extends Application {
 
 		return new Scene(pane, 850, 750);
 	}
+	public void applyNewLook(ArrayList<String> themeStyle) {}
 
 	public void applyNewLook(String[]themeStyle) {
 	}
+
+
 
 }
 
