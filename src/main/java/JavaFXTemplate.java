@@ -189,7 +189,7 @@ public class JavaFXTemplate extends Application {
 		sceneMap.put("ending", createPlayOrExitScreen());
 
 		// This is what the user sees when opening the program
-		primaryStage.setScene(sceneMap.get("oddsOfWinning"));
+		primaryStage.setScene(sceneMap.get("intro"));
 		primaryStage.show();
 	}
 

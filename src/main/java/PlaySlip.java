@@ -3,18 +3,19 @@ import java.util.*;
 public class PlaySlip {
     private int numSpots;
     private int numDrawings;
+    private boolean drawsCompleted;
+    private int currentDrawNum;
     private int drawWinningMoney;
     private int totalGameWinningMoney;
     private Set<Integer> selectedSpots = new HashSet<Integer>();
-    private Set<Integer> winningSpots = new HashSet<Integer>();
+    private Set<Integer> random20Numbers = new HashSet<Integer>();
     private ArrayList<Integer> theMatchedNums = new ArrayList<>();
 
     /*
     * Playslip constructor generates a playslip
     * object with given drawings and spots */
-    public PlaySlip(int drawings, int spots) {
-        numDrawings = drawings;
-        numSpots = spots;
+    public PlaySlip() {
+        totalGameWinningMoney = 0;
     }
 
     /*
@@ -35,11 +36,13 @@ public class PlaySlip {
     * except total winnings are reset
     * */
     public void newRound(int drawings, int spots) {
+        drawsCompleted = false;
+        currentDrawNum = 1;
         numSpots = spots;
         numDrawings = drawings;
         drawWinningMoney = 0;
         selectedSpots.clear();
-        winningSpots.clear();
+        random20Numbers.clear();
         theMatchedNums.clear();
     }
 
@@ -50,10 +53,20 @@ public class PlaySlip {
     * numbers are reset. */
 
     public void newDraw() {
-        numDrawings--;
+        if(checkNumSpots() == false || drawsCompleted == true) {
+            return;
+        }
+        if (currentDrawNum == numDrawings) {
+            drawsCompleted = true;
+        } else {
+            currentDrawNum++;
+        }
         drawWinningMoney = 0;
-        winningSpots.clear();
+        random20Numbers.clear();
         theMatchedNums.clear();
+        generate20RandNums();
+        generateMatches();
+        generateDrawWinningMoney(theMatchedNums.size());
     }
 
     /*
@@ -64,6 +77,7 @@ public class PlaySlip {
 
     public void quickPick() {
         Random randNumber = new Random();
+        selectedSpots.clear();
         while (selectedSpots.size() != numSpots) {
             selectedSpots.add(randNumber.nextInt(80) + 1);
         }
@@ -81,15 +95,12 @@ public class PlaySlip {
         }
     }
 
-    /*
-    * This generates 20 random winning numbers
-    * */
-    public ArrayList<Integer> generateWinningSpots() {
+    public ArrayList<Integer> generate20RandNums() {
         Random randNumber = new Random();
-        while (winningSpots.size() != 20) {
-            winningSpots.add(randNumber.nextInt(80) + 1);
+        while (random20Numbers.size() != 20) {
+            random20Numbers.add(randNumber.nextInt(80) + 1);
         }
-        ArrayList<Integer> winningSpotsList = new ArrayList<>(winningSpots);
+        ArrayList<Integer> winningSpotsList = new ArrayList<>(random20Numbers);
         return winningSpotsList;
     }
 
@@ -118,49 +129,48 @@ public class PlaySlip {
     * */
     public int getNumSelectedSpots() {
         return selectedSpots.size();
-    } // newly added function
+    } // newly added function for TESTING
 
-    public int getNumWinningSpots(){
-        return winningSpots.size();
+    public int getRand20NumSize(){
+        return random20Numbers.size();
     }
     /*
     * This sets the number of drawings*/
-    public void setNumDrawings(int drawings) {
-        numDrawings = drawings;
+    public int getCurrentDrawNum() {
+        return currentDrawNum;
     }
 
     /*This allows us to set num spots*/
 
-    public void setNumSpots(int spots) {
-        numSpots = spots;
-    }
+//    public void setNumSpots(int spots) {
+//        numSpots = spots;
+//    }
 
     /*tells us the number of drawings left*/
 
     public int getNumDrawings() {
         return numDrawings;
-    }
+    } // for testing
 
     /*tells us the number of allowed spots*/
     public int getNumSpots() {
         return numSpots;
-    }
+    } // for testing
 
     /*tells us the number of matches*/
     public int getNumMatches() {
         return theMatchedNums.size();
-    }
+    } // for ui
 
     /*tells us the money earned in current draw*/
     public int getDrawWinningMoney() {
-        System.out.println("This is what the total is: "+ totalGameWinningMoney);
         return drawWinningMoney;
-    }
+    } // for ui
 
     /*tells us total money earned throughout game*/
     public int getTotalGameWinningMoney() {
         return totalGameWinningMoney;
-    }
+    } // for ui
 
 
     /*
@@ -169,7 +179,7 @@ public class PlaySlip {
     * */
     public ArrayList<Integer> generateMatches() {
         // Iterate through the gameNums to find a matched number with the userNums. If so, append that number to the array
-        for (Integer num : winningSpots) {
+        for (Integer num : random20Numbers) {
             if (selectedSpots.contains(num)) {
                 theMatchedNums.add(num);
 
