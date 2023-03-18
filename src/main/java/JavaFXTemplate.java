@@ -10,15 +10,12 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -146,6 +143,7 @@ public class JavaFXTemplate extends Application {
 
 			if (hasGameStarted) {
 				primaryStage.setScene(sceneMap.get("gameplay"));
+				// update all the changes in the gameplay
 			} else {
 				primaryStage.setScene(sceneMap.get("intro"));
 			}
@@ -183,7 +181,7 @@ public class JavaFXTemplate extends Application {
 		sceneMap.put("ending", createPlayOrExitScreen());
 
 		// This is what the user sees when opening the program
-		primaryStage.setScene(sceneMap.get("intro"));
+		primaryStage.setScene(sceneMap.get("oddsOfWinning"));
 		primaryStage.show();
 	}
 
@@ -297,21 +295,177 @@ public class JavaFXTemplate extends Application {
 
 	public Scene createOddsOfWinningScreen() {
 		BorderPane pane = new BorderPane();
-		pane.setStyle("-fx-background-color: #89B982");  // temp
+		pane.setStyle("-fx-background-color: #8f7ea3");  // temp
+
+		closeOddsButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 55px; -fx-font: bold 36 serif; -fx-background-radius: 10; -fx-background-color: #796a8c");
 
 		Text oddsTitle = new Text("ODDS OF WINNING");
 		oddsTitle.setStyle("-fx-font: bold 75 serif;");
 		oddsTitle.setUnderline(true);
 
-		closeOddsButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 55px; -fx-font: bold 36 serif; -fx-background-radius: 10; -fx-background-color: #6AA761");
+		// Creating a 1 Spot Table
+		Text oneSpotTitleText = new Text("One Spot Game");
+		oneSpotTitleText.setStyle("-fx-font: bold 35 serif;");
+		oneSpotTitleText.setUnderline(true);
+		Text oneSpotOddsText = new Text("Overall Odds: 1 in 4.0 million");
+		oneSpotOddsText.setStyle("-fx-font: 15 serif;");
 
-		VBox paneCenter = new VBox(oddsTitle);
+		FlowPane oneSpotTitleHeader = new FlowPane(oneSpotTitleText, oneSpotOddsText);  // 1 Spot Table Header
+		oneSpotTitleHeader.setStyle("-fx-background-color: #c05299");
+		oneSpotTitleHeader.setPadding(new Insets(10));
+		oneSpotTitleHeader.setAlignment(Pos.CENTER);
+
+		Text oneSpotMatchTitle = new Text("Match");
+		oneSpotMatchTitle.setStyle("-fx-font: bold 20 serif;");
+		Text oneSpotPrizeTitle = new Text("Prize");
+		oneSpotPrizeTitle.setStyle("-fx-font: bold 20 serif;");
+
+		Text oneSpotMatchEntries = new Text("1\n0");
+		oneSpotMatchEntries.setStyle("-fx-font: 20 serif;");
+		oneSpotMatchEntries.setTextAlignment(TextAlignment.CENTER);
+		Text oneSpotPrizeEntries = new Text("$2\n$0");
+		oneSpotPrizeEntries.setStyle("-fx-font: 20 serif;");
+		oneSpotPrizeEntries.setTextAlignment(TextAlignment.CENTER);
+
+		VBox oneSpotMatchCol = new VBox(oneSpotMatchTitle, oneSpotMatchEntries);
+		oneSpotMatchCol.setAlignment(Pos.CENTER);
+		VBox oneSpotPrizeCol = new VBox(oneSpotPrizeTitle, oneSpotPrizeEntries);
+		oneSpotPrizeCol.setAlignment(Pos.CENTER);
+		HBox oneSpotCols = new HBox(oneSpotMatchCol, oneSpotPrizeCol);
+		oneSpotCols.setSpacing(145);
+
+		VBox oneSpotTable = new VBox(oneSpotTitleHeader, oneSpotCols);  // Create the 1 Spot table
+		oneSpotTable.setSpacing(5);
+		oneSpotTable.setPadding(new Insets(10));
+		oneSpotTable.setMaxWidth(100);
+		oneSpotTable.setStyle("-fx-background-color: #ea698b");
+
+
+		// Creating a 4 Spot Table
+		Text fourSpotTitleText = new Text("Four Spot Game");
+		fourSpotTitleText.setUnderline(true);
+		fourSpotTitleText.setStyle("-fx-font: bold 35 serif;");
+		Text fourSpotOddsText = new Text("Overall Odds: 1 in 3.86 million");
+		fourSpotOddsText.setStyle("-fx-font: 15 serif;");
+
+		FlowPane fourSpotTitleHeader = new FlowPane(fourSpotTitleText, fourSpotOddsText);  // 4 Spot Table Header
+		fourSpotTitleHeader.setStyle("-fx-background-color: #e7c6ff");
+		fourSpotTitleHeader.setPadding(new Insets(10));
+		fourSpotTitleHeader.setAlignment(Pos.CENTER);
+
+		Text fourSpotMatchTitle = new Text("Match");
+		fourSpotMatchTitle.setStyle("-fx-font: bold 20 serif;");
+		Text fourSpotPrizeTitle = new Text("Prize");
+		fourSpotPrizeTitle.setStyle("-fx-font: bold 20 serif;");
+
+		Text fourSpotMatchEntries = new Text("4\n3\n2\n1\n0");
+		fourSpotMatchEntries.setStyle("-fx-font: 20 serif;");
+		Text fourSpotPrizeEntries = new Text("$75\n$5\n$1\n$0\n$0");
+		fourSpotPrizeEntries.setTextAlignment(TextAlignment.CENTER);
+		fourSpotPrizeEntries.setStyle("-fx-font: 20 serif;");
+
+		VBox fourSpotMatchCol = new VBox(fourSpotMatchTitle, fourSpotMatchEntries);
+		fourSpotMatchCol.setAlignment(Pos.CENTER);
+		VBox fourSpotPrizeCol = new VBox(fourSpotPrizeTitle, fourSpotPrizeEntries);
+		fourSpotPrizeCol.setAlignment(Pos.CENTER);
+		HBox fourSpotCols = new HBox(fourSpotMatchCol, fourSpotPrizeCol);
+		fourSpotCols.setSpacing(160);
+
+		VBox fourSpotTable = new VBox(fourSpotTitleHeader, fourSpotCols);  // Creating the 4 Spot table
+		fourSpotTable.setMaxWidth(100);
+		fourSpotTable.setSpacing(5);
+		fourSpotTable.setPadding(new Insets(10));
+		fourSpotTable.setStyle("-fx-background-color: #c8b6ff");
+
+
+		// Creating a 8 Spot Table
+		Text eightSpotTitleText = new Text("Eight Spot Game");
+		eightSpotTitleText.setUnderline(true);
+		eightSpotTitleText.setStyle("-fx-font: bold 35 serif;");
+		Text eightSpotOddsText = new Text("Overall Odds: 1 in 9.77 million");
+		eightSpotOddsText.setStyle("-fx-font: 15 serif;");
+
+		FlowPane eightSpotTitleHeader = new FlowPane(eightSpotTitleText, eightSpotOddsText);  // 8 Spot Table Header
+		eightSpotTitleHeader.setStyle("-fx-background-color: #da9ac3");
+		eightSpotTitleHeader.setPadding(new Insets(10));
+		eightSpotTitleHeader.setAlignment(Pos.CENTER);
+
+		Text eightSpotMatchTitle = new Text("Match");
+		eightSpotMatchTitle.setStyle("-fx-font: bold 20 serif;");
+		Text eightSpotPrizeTitle = new Text("Prize");
+		eightSpotPrizeTitle.setStyle("-fx-font: bold 20 serif;");
+
+		Text eightSpotMatchEntries = new Text("8\n7\n6\n5\n4\n3\n2\n1\n0");
+		eightSpotMatchEntries.setStyle("-fx-font: 20 serif;");
+		Text eightSpotPrizeEntries = new Text("$10,000\n$750\n$50\n$12\n$2\n$0\n$0\n$0\n$0");
+		eightSpotPrizeEntries.setTextAlignment(TextAlignment.CENTER);
+		eightSpotPrizeEntries.setStyle("-fx-font: 20 serif;");
+
+		VBox eightSpotMatchCol = new VBox(eightSpotMatchTitle, eightSpotMatchEntries);
+		eightSpotMatchCol.setAlignment(Pos.CENTER);
+		VBox eightSpotPrizeCol = new VBox(eightSpotPrizeTitle, eightSpotPrizeEntries);
+		eightSpotPrizeCol.setAlignment(Pos.CENTER);
+		HBox eightSpotCols = new HBox(eightSpotMatchCol, eightSpotPrizeCol);
+		eightSpotCols.setSpacing(150);
+
+		VBox eightSpotTable = new VBox(eightSpotTitleHeader, eightSpotCols);  // Creating the 8 Spot table
+		eightSpotTable.setMaxWidth(100);
+		eightSpotTable.setSpacing(5);
+		eightSpotTable.setPadding(new Insets(10));
+		eightSpotTable.setStyle("-fx-background-color: #c05299");
+
+		// Creating a 10 Spot Table
+		Text tenSpotTitleText = new Text("Ten Spot Game");
+		tenSpotTitleText.setUnderline(true);
+		tenSpotTitleText.setStyle("-fx-font: bold 35 serif;");
+		Text tenSpotOddsText = new Text("Overall Odds: 1 in 9.05 million");
+		tenSpotOddsText.setStyle("-fx-font: 15 serif;");
+
+		FlowPane tenSpotTitleHeader = new FlowPane(tenSpotTitleText, tenSpotOddsText);  // 1 Spot Table Header
+		tenSpotTitleHeader.setStyle("-fx-font: bold 35 serif; -fx-background-color: #abb1d6");
+		tenSpotTitleHeader.setPadding(new Insets(10));
+		tenSpotTitleHeader.setAlignment(Pos.CENTER);
+
+		Text tenSpotMatchTitle = new Text("Match");
+		tenSpotMatchTitle.setStyle("-fx-font: bold 20 serif;");
+		Text tenSpotPrizeTitle = new Text("Prize");
+		tenSpotPrizeTitle.setStyle("-fx-font: bold 20 serif;");
+
+		Text tenSpotMatchEntries = new Text("10\n9\n8\n7\n6\n5\n4\n3\n2\n1\n0");
+		tenSpotMatchEntries.setStyle("-fx-font: 20 serif;");
+		tenSpotMatchEntries.setTextAlignment(TextAlignment.CENTER);
+		Text tenSpotPrizeEntries = new Text("$100,000\n$4,250\n$450\n$40\n$15\n$2\n$0\n$0\n$0\n$0\n$5");
+		tenSpotPrizeEntries.setTextAlignment(TextAlignment.CENTER);
+		tenSpotPrizeEntries.setStyle("-fx-font: 20 serif;");
+
+		VBox tenSpotMatchCol = new VBox(tenSpotMatchTitle, tenSpotMatchEntries);
+		tenSpotMatchCol.setAlignment(Pos.CENTER);
+		VBox tenSpotPrizeCol = new VBox(tenSpotPrizeTitle, tenSpotPrizeEntries);
+		tenSpotPrizeCol.setAlignment(Pos.CENTER);
+		HBox tenSpotCols = new HBox(tenSpotMatchCol, tenSpotPrizeCol);
+		tenSpotCols.setSpacing(125);
+
+		VBox tenSpotTable = new VBox(tenSpotTitleHeader, tenSpotCols);  // Creating the 10 Spot table
+		tenSpotTable.setMaxWidth(100);
+		tenSpotTable.setSpacing(5);
+		tenSpotTable.setPadding(new Insets(10));
+		tenSpotTable.setStyle("-fx-background-color: #abc6d6");
+
+		// Combine all the odds tabled
+		HBox oddsTables = new HBox(oneSpotTable, fourSpotTable, eightSpotTable, tenSpotTable);
+		oddsTables.setSpacing(35);
+		oddsTables.setAlignment(Pos.CENTER);
+		oddsTables.setMargin(oneSpotTable, new Insets(0, 0, 0, 50));
+		oddsTables.setMargin(tenSpotTable, new Insets(0, 50, 0, 0));
+
+		// Assemble all the parts for the paneBorder
+		VBox paneCenter = new VBox(oddsTitle, oddsTables);
 		HBox paneRight = new HBox(closeOddsButton);
 
-		// TODO: Add an image of all the odds of winning
 
 		// Adjust its arrangements/margins
 		paneCenter.setAlignment(Pos.CENTER);
+		paneCenter.setSpacing(35);
 
 		paneRight.setAlignment(Pos.CENTER_RIGHT);
 		paneRight.setMargin(closeOddsButton, new Insets(15));
@@ -320,8 +474,13 @@ public class JavaFXTemplate extends Application {
 		pane.setCenter(paneCenter);
 		pane.setTop(paneRight);
 
+		// Scroll through the whole scene's contents
+		ScrollPane scroll = new ScrollPane();
+		scroll.setContent(pane);
+		scroll.setFitToHeight(true);
+		scroll.setFitToWidth(true);
 
-		return new Scene(pane, 850, 750);
+		return new Scene(scroll, 850, 750);
 	}
 
 	public Scene createLookScreen() {
