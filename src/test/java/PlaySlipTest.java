@@ -1,10 +1,10 @@
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class PlaySlipTest {
     static PlaySlip playslip;
@@ -16,9 +16,8 @@ class PlaySlipTest {
 
     @Test
     void playSlipConstructorTest() {
-        assertEquals(0, playslip. getTotalGameWinningMoney());
+        assertEquals(0, playslip.getTotalGameWinningMoney());
     }
-
 
     @Test
     void addSpotNumTest() {
@@ -51,7 +50,6 @@ class PlaySlipTest {
         assertEquals(1, playslip.getNumSelectedSpots());
     }
 
-
     @Test
     void removeSpotDuplicateNum() {
         playslip.addSpotNum(35);
@@ -66,7 +64,7 @@ class PlaySlipTest {
     }
 
     @Test
-    void addNRemoveNums(){
+    void addNRemoveNums() {
         playslip.addSpotNum(35);
         playslip.addSpotNum(32);
         playslip.addSpotNum(36);
@@ -79,10 +77,9 @@ class PlaySlipTest {
         assertEquals(3, playslip.getNumSelectedSpots());
     }
 
-
     @Test
     void newRoundTest() {
-        playslip.newRound(4,4);
+        playslip.newRound(4, 4);
         assertEquals(0, playslip.getDrawWinningMoney());
         assertEquals(4, playslip.getNumDrawings());
         assertEquals(4, playslip.getNumSpots());
@@ -91,24 +88,9 @@ class PlaySlipTest {
         assertEquals(0, playslip.getRand20NumSize());
     }
 
-    // check num spots unit test goes here
-    @Test
-    void checkNumSpotsTest(){
-        playslip.newRound(2,4);
-        assertEquals(false, playslip.checkNumSpots());
-        playslip.addSpotNum(35);
-        assertEquals(false, playslip.checkNumSpots());
-        playslip.addSpotNum(32);
-        assertEquals(false, playslip.checkNumSpots());
-        playslip.addSpotNum(36);
-        assertEquals(false, playslip.checkNumSpots());
-        playslip.addSpotNum(31);
-        assertEquals(true, playslip.checkNumSpots());
-    }
-
     @Test
     void newDrawTest() {
-        playslip.newRound(2,4);
+        playslip.newRound(2, 4);
         playslip.addSpotNum(35);
         playslip.addSpotNum(32);
         playslip.addSpotNum(36);
@@ -128,24 +110,66 @@ class PlaySlipTest {
 
     }
 
+    // check num spots unit test goes here
     @Test
-    void quickPickTest(){
-        playslip.newRound(2,4);
-        playslip.quickPick();
-        assertTrue((playslip.getNumSelectedSpots()) == 4);
+    void checkNumSpotsTest() {
+        playslip.newRound(2, 4);
+        assertFalse(playslip.checkNumSpots());
+        playslip.addSpotNum(35);
+        assertFalse(playslip.checkNumSpots());
+        playslip.addSpotNum(32);
+        assertFalse(playslip.checkNumSpots());
+        playslip.addSpotNum(36);
+        assertFalse(playslip.checkNumSpots());
+        playslip.addSpotNum(31);
+        assertTrue(playslip.checkNumSpots());
     }
 
+    @Test
+    void quickPickTest() {
+        playslip.newRound(2, 4);
+        playslip.quickPick();
+        assertEquals(4, (playslip.getNumSelectedSpots()));
+    }
 
     @Test
-    void generateWinningSpotsTest(){
-        playslip.newRound(2,4);
+    void checkDrawsCompletedTest() {
+        playslip.newRound(3, 4);
+        playslip.addSpotNum(32);
+        assertFalse(playslip.checkNumSpots());
+        playslip.addSpotNum(33);
+        playslip.addSpotNum(34);
+        playslip.addSpotNum(35);
+        assertTrue(playslip.checkNumSpots());
+    }
+
+    @Test
+    void generate20RandomNumTest() {
+        playslip.newRound(2, 4);
         playslip.generate20RandNums();
         assertEquals(20, playslip.getRand20NumSize());
     }
 
     @Test
-    void generateWinningMoneyTest1(){
-        playslip.newRound(2,1);
+    void generateMatches() {
+        playslip.newRound(2, 4);
+        ArrayList<Integer> matches = new ArrayList<Integer>();
+        ArrayList<Integer> winningspots = playslip.generate20RandNums();
+        playslip.addSpotNum(winningspots.get(0));
+        playslip.addSpotNum(winningspots.get(2));
+        playslip.addSpotNum(winningspots.get(4));
+        playslip.addSpotNum(winningspots.get(5));
+        matches.add(winningspots.get(0));
+        matches.add(winningspots.get(2));
+        matches.add(winningspots.get(4));
+        matches.add(winningspots.get(5));
+        Collections.sort(matches);
+        assertEquals(matches, playslip.generateMatches());
+    }
+
+    @Test
+    void generateWinningMoneyTest1() {
+        playslip.newRound(2, 1);
         playslip.generateDrawWinningMoney(0);
         assertEquals(0, playslip.getDrawWinningMoney());
         playslip.generateDrawWinningMoney(1);
@@ -153,8 +177,8 @@ class PlaySlipTest {
     }
 
     @Test
-    void generateWinningMoneyTest2(){
-        playslip.newRound(2,4);
+    void generateWinningMoneyTest2() {
+        playslip.newRound(2, 4);
         playslip.generateDrawWinningMoney(2);
         assertEquals(1, playslip.getDrawWinningMoney());
         playslip.generateDrawWinningMoney(0);
@@ -168,10 +192,10 @@ class PlaySlipTest {
 
 
     @Test
-    void generateWinningMoneyTest3(){
+    void generateWinningMoneyTest3() {
         /* this test only checks if the generateDrawWinning method is working
         correctly. Therefore, the num of drawings doesn't matter here */
-        playslip.newRound(2,8);
+        playslip.newRound(2, 8);
         playslip.generateDrawWinningMoney(0);
         assertEquals(0, playslip.getDrawWinningMoney());
         playslip.generateDrawWinningMoney(1);
@@ -194,10 +218,10 @@ class PlaySlipTest {
     }
 
     @Test
-    void generateWinningMoneyTest4(){
+    void generateWinningMoneyTest4() {
         /* this test only checks if the generateDrawWinning method is working
         correctly. Therefore, the num of drawings doesn't matter here */
-        playslip.newRound(2,10);
+        playslip.newRound(2, 10);
         playslip.generateDrawWinningMoney(0);
         assertEquals(5, playslip.getDrawWinningMoney());
         playslip.generateDrawWinningMoney(1);
@@ -223,9 +247,8 @@ class PlaySlipTest {
         assertEquals(104762, playslip.getTotalGameWinningMoney());
     }
 
-
     @Test
-    void getNumSelectedSpotsTest(){
+    void getNumSelectedSpotsTest() {
         playslip.addSpotNum(35);
         playslip.addSpotNum(32);
         assertEquals(2, playslip.getNumSelectedSpots());
@@ -235,37 +258,31 @@ class PlaySlipTest {
         assertEquals(3, playslip.getNumSelectedSpots());
     }
 
-
-
     @Test
-    void getRand20NumSizeTest(){
-        playslip.newRound(3,10);
+    void getRand20NumSizeTest() {
+        playslip.newRound(3, 10);
         playslip.generate20RandNums();
         assertEquals(20, playslip.getRand20NumSize());
     }
 
     @Test
-    void getNumDrawingsTest(){
-        playslip.newRound(3,10);
+    void getNumDrawingsTest() {
+        playslip.newRound(3, 10);
         assertEquals(3, playslip.getNumDrawings());
-        playslip.newRound(4,10);
+        playslip.newRound(4, 10);
         assertEquals(4, playslip.getNumDrawings());
     }
 
-
-
     @Test
-    void getNumSpotsTest(){
-        playslip.newRound(3,4);
+    void getNumSpotsTest() {
+        playslip.newRound(3, 4);
         assertEquals(4, playslip.getNumSpots());
-        playslip.newRound(4,8);
+        playslip.newRound(4, 8);
         assertEquals(8, playslip.getNumSpots());
     }
 
-
-
     @Test
-    void getNumMatchesTest(){
+    void getNumMatchesTest() {
         ArrayList<Integer> winningspots = playslip.generate20RandNums();
         playslip.addSpotNum(winningspots.get(0));
         playslip.addSpotNum(winningspots.get(2));
@@ -275,10 +292,9 @@ class PlaySlipTest {
         assertEquals(4, playslip.getNumMatches());
     }
 
-
     @Test
-    void getDrawWinningMoney(){
-        playslip.newRound(2,4);
+    void getDrawWinningMoney() {
+        playslip.newRound(2, 4);
         ArrayList<Integer> winningspots = playslip.generate20RandNums();
         playslip.addSpotNum(winningspots.get(0));
         playslip.addSpotNum(winningspots.get(2));
@@ -289,10 +305,9 @@ class PlaySlipTest {
         assertEquals(75, playslip.getDrawWinningMoney());
     }
 
-
     @Test
-    void getTotalGameWinningMoney(){
-        playslip.newRound(2,4);
+    void getTotalGameWinningMoney() {
+        playslip.newRound(2, 4);
         ArrayList<Integer> winningspots = playslip.generate20RandNums();
         playslip.addSpotNum(winningspots.get(0));
         playslip.addSpotNum(winningspots.get(2));
@@ -303,26 +318,6 @@ class PlaySlipTest {
         assertEquals(75, playslip.getDrawWinningMoney());
         assertEquals(75, playslip.getTotalGameWinningMoney());
     }
-
-
-    @Test
-    void generateMatches(){
-        playslip.newRound(2,4);
-        ArrayList<Integer>matches = new ArrayList<Integer>();
-        ArrayList<Integer> winningspots = playslip.generate20RandNums();
-        playslip.addSpotNum(winningspots.get(0));
-        playslip.addSpotNum(winningspots.get(2));
-        playslip.addSpotNum(winningspots.get(4));
-        playslip.addSpotNum(winningspots.get(5));
-        matches.add(winningspots.get(0));
-        matches.add(winningspots.get(2));
-        matches.add(winningspots.get(4));
-        matches.add(winningspots.get(5));
-        Collections.sort(matches);
-        assertEquals(matches, playslip.generateMatches());
-    }
-
-
 
 
 }
