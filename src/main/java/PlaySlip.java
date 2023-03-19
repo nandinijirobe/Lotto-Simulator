@@ -79,7 +79,8 @@ public class PlaySlip {
         Random randNumber = new Random();
         selectedSpots.clear();
         while (selectedSpots.size() != numSpots) {
-            selectedSpots.add(randNumber.nextInt(80) + 1);
+            int i = randNumber.nextInt(80) + 1;
+            selectedSpots.add(i);
         }
     }
 
@@ -94,6 +95,7 @@ public class PlaySlip {
             return false;
         }
     }
+
 
     public ArrayList<Integer> generate20RandNums() {
         Random randNumber = new Random();
@@ -140,6 +142,12 @@ public class PlaySlip {
         return currentDrawNum;
     }
 
+    // TEST THIS LATER!!
+    public Set<Integer> getSelectedSpots() {
+        ArrayList<Integer>selectedNumbers = new ArrayList<>(selectedSpots);
+        return selectedSpots;
+    }
+
     /*This allows us to set num spots*/
 
 //    public void setNumSpots(int spots) {
@@ -172,6 +180,30 @@ public class PlaySlip {
         return totalGameWinningMoney;
     } // for ui
 
+    public String getMatchesString(){
+        Collections.sort(theMatchedNums);
+        String numbers = "Here are the matches!\n";
+        for(int i = 0; i < theMatchedNums.size()-1; i++){
+            numbers += String.valueOf(theMatchedNums.get(i)) + ", ";
+        }
+        numbers += String.valueOf(theMatchedNums.get(theMatchedNums.size()-1));
+        return numbers;
+    }
+
+    public String get20RandNumString(){
+        ArrayList<Integer>numberlist = new ArrayList<>(random20Numbers);
+        Collections.sort(numberlist);
+        String numbers = "Here are the 20 random generated numbers:\n";
+        for(int i = 0; i < numberlist.size()-1; i++){
+            numbers += String.valueOf(numberlist.get(i)) + ", ";
+        }
+        numbers += String.valueOf(numberlist.get(numberlist.size()-1));
+        return numbers;
+    }
+
+    public boolean checkDrawsCompleted(){
+        return drawsCompleted;
+    }
 
     /*
     * uses the selected spots and winning spots set to create a set and an array
@@ -182,7 +214,6 @@ public class PlaySlip {
         for (Integer num : random20Numbers) {
             if (selectedSpots.contains(num)) {
                 theMatchedNums.add(num);
-
             }
         }
         Collections.sort(theMatchedNums);  // Sort the matched numbers in ascending order
