@@ -220,11 +220,11 @@ public class JavaFXTemplate extends Application {
         pane.setStyle("-fx-background-color: " + themeColors[1]);
 
         Text gameTitle = new Text("KENO");
-        gameTitle.setStyle("-fx-font: bold 150 serif;");
+        gameTitle.setStyle("-fx-font: bold 150 Helvetica;");
 
         //Customize the buttons (TODO: maybe move the background color to the main method b/c of newlook)
-        playGameButton.setStyle("-fx-pref-height: 90px; -fx-pref-width: 600px; -fx-font: bold 36 serif; -fx-background-radius: 10; -fx-background-color: " + themeColors[0]);
-        menuButton1.setStyle("-fx-pref-height: 55px; -fx-pref-width: 95px; -fx-font: bold 20 serif; -fx-background-radius: 10; -fx-background-color: " + themeColors[0]);
+        playGameButton.setStyle("-fx-pref-height: 90px; -fx-pref-width: 600px; -fx-font: bold 36 Helvetica; -fx-background-radius: 10; -fx-background-color: " + themeColors[0]);
+        menuButton1.setStyle("-fx-pref-height: 55px; -fx-pref-width: 95px; -fx-font: bold 20 Helvetica; -fx-background-radius: 10; -fx-background-color: " + themeColors[0]);
 
         VBox paneCenter = new VBox(gameTitle, playGameButton);
         HBox paneRight = new HBox(menuButton1);
@@ -280,7 +280,7 @@ public class JavaFXTemplate extends Application {
 
         submitFormButton = new Button("Submit");
         submitFormButton.setStyle("-fx-pref-height: 20px; -fx-pref-width: 95px; -fx-font: bold 15 Helvetica; -fx-background-color: #89B982;");
-        menuButton2.setStyle("-fx-pref-height: 55px; -fx-pref-width: 95px; -fx-font: bold 20 serif; -fx-background-radius: 10; -fx-background-color: #89B982;");
+        menuButton2.setStyle("-fx-pref-height: 55px; -fx-pref-width: 95px; -fx-font: bold 20 Helvetica; -fx-background-radius: 10; -fx-background-color: #89B982;");
 
 //		spotsToPlay = new GridPane();
 //		drawsToPlay = new GridPane();
@@ -420,9 +420,9 @@ public class JavaFXTemplate extends Application {
                 for (int i = 0; i < arrayOfFormButtons.size(); i++) {
                     arrayOfFormButtons.get(i).setDisable(true);
                 }
-                int drawNum = Integer.valueOf(((ToggleButton) group1.getSelectedToggle()).getText());
-                int spotsNum = Integer.valueOf(((ToggleButton) group2.getSelectedToggle()).getText());
-                game.newRound(spotsNum, drawNum);
+                int drawNum = Integer.valueOf(((ToggleButton) group2.getSelectedToggle()).getText());
+                int spotsNum = Integer.valueOf(((ToggleButton) group1.getSelectedToggle()).getText());
+                game.newRound(drawNum,spotsNum);
 
                 instructionBoard.setText("Now choose " + spotsNum + " spots on the bet card.");
 
@@ -524,7 +524,7 @@ public class JavaFXTemplate extends Application {
         pane.setStyle("-fx-background-color: #7896D7");
 
         Text menuTitle = new Text("MENU");
-        menuTitle.setStyle("-fx-font: bold 100 serif;");
+        menuTitle.setStyle("-fx-font: bold 100 Helvetica;");
         menuTitle.setUnderline(true);
 
         // Close the application window
@@ -532,11 +532,11 @@ public class JavaFXTemplate extends Application {
         exitButton.setOnAction(e -> Platform.exit());
 
         // Customize the buttons
-        displayRulesButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 600px; -fx-font: bold 36 serif; -fx-background-radius: 10;");
-        checkOddsWinningButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 600px; -fx-font: bold 36 serif; -fx-background-radius: 10;");
-        newLookButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 600px; -fx-font: bold 36 serif; -fx-background-radius: 10;");
-        exitButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 600px; -fx-font: bold 36 serif; -fx-background-radius: 10;");
-        closeMenuButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 55px; -fx-font: bold 36 serif; -fx-background-radius: 10; -fx-background-color: #6584C8");
+        displayRulesButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 600px; -fx-font: bold 36 Helvetica; -fx-background-radius: 10;");
+        checkOddsWinningButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 600px; -fx-font: bold 36 Helvetica; -fx-background-radius: 10;");
+        newLookButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 600px; -fx-font: bold 36 Helvetica; -fx-background-radius: 10;");
+        exitButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 600px; -fx-font: bold 36 Helvetica; -fx-background-radius: 10;");
+        closeMenuButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 55px; -fx-font: bold 36 Helvetica; -fx-background-radius: 10; -fx-background-color: #6584C8");
 
         VBox paneCenter = new VBox(15, menuTitle, displayRulesButton, checkOddsWinningButton, newLookButton, exitButton);
         HBox paneRight = new HBox(closeMenuButton);
@@ -558,25 +558,25 @@ public class JavaFXTemplate extends Application {
         pane.setStyle("-fx-background-color: #FF8787");  // temp
 
         Text rulesTitle = new Text("RULES");
-        rulesTitle.setStyle("-fx-font: bold 75 serif;");
+        rulesTitle.setStyle("-fx-font: bold 75 Helvetica;");
         rulesTitle.setUnderline(true);
 
-        Text rule1 = new Text("Select the number of spots (1, 4, 8, or 10) and drawings (1-4) to play. This cannot be changed once it begins.");
-        Text rule2 = new Text("Depending on the number of spots you pick, select that amount of numbers (1-80) on the grid. You cannot change it once the drawings begin.");
-        Text rule3 = new Text("For each draw, 20 random distinct numbers will be drawn, and you win money based on the number of matches you made with your selected numbers.");
+        Text rule1 = new Text("1. Select the number of spots (1, 4, 8, or 10) and drawings (1-4) to play. This cannot be changed once it begins.");
+        Text rule2 = new Text("2. Depending on the number of spots you pick, select that amount of numbers (1-80) on the grid. You cannot change it once the drawings begin.");
+        Text rule3 = new Text("3. For each draw, 20 random distinct numbers will be drawn, and you win money based on the number of matches you made with your selected numbers.");
         // TODO: Feel free to modify/add more rules.
 
-        rule1.setStyle("-fx-font: 25 serif;");
+        rule1.setStyle("-fx-font: 25 Helvetica;");
         rule1.setWrappingWidth(840);
-        rule1.setTextAlignment(TextAlignment.CENTER);
-        rule2.setStyle("-fx-font: 25 serif;");
+        rule1.setTextAlignment(TextAlignment.LEFT);
+        rule2.setStyle("-fx-font: 25 Helvetica;");
         rule2.setWrappingWidth(840);
-        rule2.setTextAlignment(TextAlignment.CENTER);
-        rule3.setStyle("-fx-font: 25 serif;");
+        rule2.setTextAlignment(TextAlignment.LEFT);
+        rule3.setStyle("-fx-font: 25 Helvetica;");
         rule3.setWrappingWidth(840);
-        rule3.setTextAlignment(TextAlignment.CENTER);
+        rule3.setTextAlignment(TextAlignment.LEFT);
 
-        closeRulesButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 55px; -fx-font: bold 36 serif; -fx-background-radius: 10; -fx-background-color: #E77070");
+        closeRulesButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 55px; -fx-font: bold 36 Helvetica; -fx-background-radius: 10; -fx-background-color: #E77070");
 
         VBox paneCenter = new VBox(rulesTitle, rule1, rule2, rule3);
         HBox paneRight = new HBox(closeRulesButton);
@@ -599,18 +599,18 @@ public class JavaFXTemplate extends Application {
         BorderPane pane = new BorderPane();
         pane.setStyle("-fx-background-color: #8f7ea3");  // temp
 
-        closeOddsButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 55px; -fx-font: bold 36 serif; -fx-background-radius: 10; -fx-background-color: #796a8c");
+        closeOddsButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 55px; -fx-font: bold 36 Helvetica; -fx-background-radius: 10; -fx-background-color: #796a8c");
 
         Text oddsTitle = new Text("ODDS OF WINNING");
-        oddsTitle.setStyle("-fx-font: bold 75 serif;");
+        oddsTitle.setStyle("-fx-font: bold 75 Helvetica;");
         oddsTitle.setUnderline(true);
 
         // Creating a 1 Spot Table
         Text oneSpotTitleText = new Text("One Spot Game");
-        oneSpotTitleText.setStyle("-fx-font: bold 35 serif;");
+        oneSpotTitleText.setStyle("-fx-font: bold 35 Helvetica;");
         oneSpotTitleText.setUnderline(true);
         Text oneSpotOddsText = new Text("Overall Odds: 1 in 4.0 million");
-        oneSpotOddsText.setStyle("-fx-font: 15 serif;");
+        oneSpotOddsText.setStyle("-fx-font: 15 Helvetica;");
 
         FlowPane oneSpotTitleHeader = new FlowPane(oneSpotTitleText, oneSpotOddsText);  // 1 Spot Table Header
         oneSpotTitleHeader.setStyle("-fx-background-color: #c05299");
@@ -618,15 +618,15 @@ public class JavaFXTemplate extends Application {
         oneSpotTitleHeader.setAlignment(Pos.CENTER);
 
         Text oneSpotMatchTitle = new Text("Match");
-        oneSpotMatchTitle.setStyle("-fx-font: bold 20 serif;");
+        oneSpotMatchTitle.setStyle("-fx-font: bold 20 Helvetica;");
         Text oneSpotPrizeTitle = new Text("Prize");
-        oneSpotPrizeTitle.setStyle("-fx-font: bold 20 serif;");
+        oneSpotPrizeTitle.setStyle("-fx-font: bold 20 Helvetica;");
 
         Text oneSpotMatchEntries = new Text("1\n0");
-        oneSpotMatchEntries.setStyle("-fx-font: 20 serif;");
+        oneSpotMatchEntries.setStyle("-fx-font: 20 Helvetica;");
         oneSpotMatchEntries.setTextAlignment(TextAlignment.CENTER);
         Text oneSpotPrizeEntries = new Text("$2\n$0");
-        oneSpotPrizeEntries.setStyle("-fx-font: 20 serif;");
+        oneSpotPrizeEntries.setStyle("-fx-font: 20 Helvetica;");
         oneSpotPrizeEntries.setTextAlignment(TextAlignment.CENTER);
 
         VBox oneSpotMatchCol = new VBox(oneSpotMatchTitle, oneSpotMatchEntries);
@@ -646,9 +646,9 @@ public class JavaFXTemplate extends Application {
         // Creating a 4 Spot Table
         Text fourSpotTitleText = new Text("Four Spot Game");
         fourSpotTitleText.setUnderline(true);
-        fourSpotTitleText.setStyle("-fx-font: bold 35 serif;");
+        fourSpotTitleText.setStyle("-fx-font: bold 35 Helvetica;");
         Text fourSpotOddsText = new Text("Overall Odds: 1 in 3.86 million");
-        fourSpotOddsText.setStyle("-fx-font: 15 serif;");
+        fourSpotOddsText.setStyle("-fx-font: 15 Helvetica;");
 
         FlowPane fourSpotTitleHeader = new FlowPane(fourSpotTitleText, fourSpotOddsText);  // 4 Spot Table Header
         fourSpotTitleHeader.setStyle("-fx-background-color: #e7c6ff");
@@ -656,15 +656,15 @@ public class JavaFXTemplate extends Application {
         fourSpotTitleHeader.setAlignment(Pos.CENTER);
 
         Text fourSpotMatchTitle = new Text("Match");
-        fourSpotMatchTitle.setStyle("-fx-font: bold 20 serif;");
+        fourSpotMatchTitle.setStyle("-fx-font: bold 20 Helvetica;");
         Text fourSpotPrizeTitle = new Text("Prize");
-        fourSpotPrizeTitle.setStyle("-fx-font: bold 20 serif;");
+        fourSpotPrizeTitle.setStyle("-fx-font: bold 20 Helvetica;");
 
         Text fourSpotMatchEntries = new Text("4\n3\n2\n1\n0");
-        fourSpotMatchEntries.setStyle("-fx-font: 20 serif;");
+        fourSpotMatchEntries.setStyle("-fx-font: 20 Helvetica;");
         Text fourSpotPrizeEntries = new Text("$75\n$5\n$1\n$0\n$0");
         fourSpotPrizeEntries.setTextAlignment(TextAlignment.CENTER);
-        fourSpotPrizeEntries.setStyle("-fx-font: 20 serif;");
+        fourSpotPrizeEntries.setStyle("-fx-font: 20 Helvetica;");
 
         VBox fourSpotMatchCol = new VBox(fourSpotMatchTitle, fourSpotMatchEntries);
         fourSpotMatchCol.setAlignment(Pos.CENTER);
@@ -683,9 +683,9 @@ public class JavaFXTemplate extends Application {
         // Creating a 8 Spot Table
         Text eightSpotTitleText = new Text("Eight Spot Game");
         eightSpotTitleText.setUnderline(true);
-        eightSpotTitleText.setStyle("-fx-font: bold 35 serif;");
+        eightSpotTitleText.setStyle("-fx-font: bold 35 Helvetica;");
         Text eightSpotOddsText = new Text("Overall Odds: 1 in 9.77 million");
-        eightSpotOddsText.setStyle("-fx-font: 15 serif;");
+        eightSpotOddsText.setStyle("-fx-font: 15 Helvetica;");
 
         FlowPane eightSpotTitleHeader = new FlowPane(eightSpotTitleText, eightSpotOddsText);  // 8 Spot Table Header
         eightSpotTitleHeader.setStyle("-fx-background-color: #da9ac3");
@@ -693,15 +693,15 @@ public class JavaFXTemplate extends Application {
         eightSpotTitleHeader.setAlignment(Pos.CENTER);
 
         Text eightSpotMatchTitle = new Text("Match");
-        eightSpotMatchTitle.setStyle("-fx-font: bold 20 serif;");
+        eightSpotMatchTitle.setStyle("-fx-font: bold 20 Helvetica;");
         Text eightSpotPrizeTitle = new Text("Prize");
-        eightSpotPrizeTitle.setStyle("-fx-font: bold 20 serif;");
+        eightSpotPrizeTitle.setStyle("-fx-font: bold 20 Helvetica;");
 
         Text eightSpotMatchEntries = new Text("8\n7\n6\n5\n4\n3\n2\n1\n0");
-        eightSpotMatchEntries.setStyle("-fx-font: 20 serif;");
+        eightSpotMatchEntries.setStyle("-fx-font: 20 Helvetica;");
         Text eightSpotPrizeEntries = new Text("$10,000\n$750\n$50\n$12\n$2\n$0\n$0\n$0\n$0");
         eightSpotPrizeEntries.setTextAlignment(TextAlignment.CENTER);
-        eightSpotPrizeEntries.setStyle("-fx-font: 20 serif;");
+        eightSpotPrizeEntries.setStyle("-fx-font: 20 Helvetica;");
 
         VBox eightSpotMatchCol = new VBox(eightSpotMatchTitle, eightSpotMatchEntries);
         eightSpotMatchCol.setAlignment(Pos.CENTER);
@@ -719,26 +719,26 @@ public class JavaFXTemplate extends Application {
         // Creating a 10 Spot Table
         Text tenSpotTitleText = new Text("Ten Spot Game");
         tenSpotTitleText.setUnderline(true);
-        tenSpotTitleText.setStyle("-fx-font: bold 35 serif;");
+        tenSpotTitleText.setStyle("-fx-font: bold 35 Helvetica;");
         Text tenSpotOddsText = new Text("Overall Odds: 1 in 9.05 million");
-        tenSpotOddsText.setStyle("-fx-font: 15 serif;");
+        tenSpotOddsText.setStyle("-fx-font: 15 Helvetica;");
 
         FlowPane tenSpotTitleHeader = new FlowPane(tenSpotTitleText, tenSpotOddsText);  // 1 Spot Table Header
-        tenSpotTitleHeader.setStyle("-fx-font: bold 35 serif; -fx-background-color: #abb1d6");
+        tenSpotTitleHeader.setStyle("-fx-font: bold 35 Helvetica; -fx-background-color: #abb1d6");
         tenSpotTitleHeader.setPadding(new Insets(10));
         tenSpotTitleHeader.setAlignment(Pos.CENTER);
 
         Text tenSpotMatchTitle = new Text("Match");
-        tenSpotMatchTitle.setStyle("-fx-font: bold 20 serif;");
+        tenSpotMatchTitle.setStyle("-fx-font: bold 20 Helvetica;");
         Text tenSpotPrizeTitle = new Text("Prize");
-        tenSpotPrizeTitle.setStyle("-fx-font: bold 20 serif;");
+        tenSpotPrizeTitle.setStyle("-fx-font: bold 20 Helvetica;");
 
         Text tenSpotMatchEntries = new Text("10\n9\n8\n7\n6\n5\n4\n3\n2\n1\n0");
-        tenSpotMatchEntries.setStyle("-fx-font: 20 serif;");
+        tenSpotMatchEntries.setStyle("-fx-font: 20 Helvetica;");
         tenSpotMatchEntries.setTextAlignment(TextAlignment.CENTER);
         Text tenSpotPrizeEntries = new Text("$100,000\n$4,250\n$450\n$40\n$15\n$2\n$0\n$0\n$0\n$0\n$5");
         tenSpotPrizeEntries.setTextAlignment(TextAlignment.CENTER);
-        tenSpotPrizeEntries.setStyle("-fx-font: 20 serif;");
+        tenSpotPrizeEntries.setStyle("-fx-font: 20 Helvetica;");
 
         VBox tenSpotMatchCol = new VBox(tenSpotMatchTitle, tenSpotMatchEntries);
         tenSpotMatchCol.setAlignment(Pos.CENTER);
@@ -790,12 +790,12 @@ public class JavaFXTemplate extends Application {
         pane.setStyle("-fx-background-color: #89B982");  // temp
 
         Text lookTitle = new Text("Choose a Theme Style");
-        lookTitle.setStyle("-fx-font: bold 75 serif;");
+        lookTitle.setStyle("-fx-font: bold 75 Helvetica;");
         lookTitle.setUnderline(true);
 
-        defaultThemeButton.setStyle("-fx-font: bold 50 serif; -fx-background-color: #0CA789;");
-        pinkThemeButton.setStyle("-fx-font: bold 50 serif; -fx-background-color: #AC1E2D;");
-        closeLookButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 55px; -fx-font: bold 36 serif; -fx-background-radius: 10; -fx-background-color: #6AA761");
+        defaultThemeButton.setStyle("-fx-font: bold 50 Helvetica; -fx-background-color: #0CA789;");
+        pinkThemeButton.setStyle("-fx-font: bold 50 Helvetica; -fx-background-color: #AC1E2D;");
+        closeLookButton.setStyle("-fx-pref-height: 55px; -fx-pref-width: 55px; -fx-font: bold 36 Helvetica; -fx-background-radius: 10; -fx-background-color: #6AA761");
 
         HBox buttons = new HBox(defaultThemeButton, pinkThemeButton);
         VBox paneCenter = new VBox(lookTitle, buttons);
@@ -823,14 +823,14 @@ public class JavaFXTemplate extends Application {
         pane.setStyle("-fx-background-color: #388251");
 
 //        Text endTitle = new Text("Want to Play Again?");
-        endTitle.setStyle("-fx-font: bold 75 serif;");
+        endTitle.setStyle("-fx-font: bold 75 Helvetica;");
 
         // Close the application window
         Button exitGameButton = new Button("Exit The Game");
         exitGameButton.setOnAction(e -> Platform.exit());
 
-        playAgainButton.setStyle("-fx-font: bold 50 serif; -fx-background-color: #CEE741;");
-        exitGameButton.setStyle("-fx-font: bold 50 serif; -fx-background-color: #CEE741;");
+        playAgainButton.setStyle("-fx-font: bold 50 Helvetica; -fx-background-color: #CEE741;");
+        exitGameButton.setStyle("-fx-font: bold 50 Helvetica; -fx-background-color: #CEE741;");
 
         HBox buttons = new HBox(playAgainButton, exitGameButton);
         VBox paneCenter = new VBox(endTitle, buttons);
