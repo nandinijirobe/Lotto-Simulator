@@ -181,6 +181,10 @@ public class PlaySlip {
     } // for ui
 
     public String getMatchesString(){
+        if (theMatchedNums.size() == 0) {
+            return "Sorry, there is no match!";
+        }
+
         Collections.sort(theMatchedNums);
         String numbers = "Here are the matches!\n";
         for(int i = 0; i < theMatchedNums.size()-1; i++){
