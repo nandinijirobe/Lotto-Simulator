@@ -65,16 +65,37 @@ public class JavaFXTemplate extends Application {
     private boolean hasGameStarted = false;
     private ArrayList<ToggleButton> arrayOfGridButtons = new ArrayList<>();
     private ArrayList<RadioButton> arrayOfFormButtons = new ArrayList<>();
+    private BorderPane gameBorderpane;
+    private StackPane displayTotalWinningGameFlow;
+    private StackPane formText1Pane;
+    private StackPane formText2Pane;
+    private VBox setupForm;
+    private StackPane instructionBoardFlow;
+    private StackPane display20RandomNumsFlow;
+    private StackPane displayNumMatchesFlow;
+    private StackPane displayMatchedNumsFlow;
+    private StackPane displayDrawWinningFlow;
 
     // Each theme style contains the colors' hex codes
-    private String[] defaultTheme = new String[]{
-            "#94B49F",
-            "#E5E3C9"
-    };
+    private String[] defaultTheme = new String[] {"#94B49F", "#E5E3C9", "#E2F0E7", "#929F97", "#A87D7D", "#B4CFB0"};
+
+    // green
+    // beige
+    // light green
+    // grey
+    // reddish brown
+    // light green for the grid and the instruction board
     private String[] pinkTheme = new String[]{
-            "#F24726",
-            "#FF8787"
+            "#AC1E2D",  // dark red
+            "#FF8787",  // pink (background)
+            "#E8CFD3",  // light pink
+            "#995757",  // brown
+            "#AC1E2D",  // dark red
+            "#E8CFD3"
+
     };
+
+    private String gridButtonBorder = "#B4CFB0";
 
     private PauseTransition pause;
     private PauseTransition endPause;
@@ -152,7 +173,9 @@ public class JavaFXTemplate extends Application {
 
         // Change the look of the intro screen and the gameplay screen w/ the default theme colors (green)
         defaultThemeButton.setOnAction(e -> {
+//            defaultTheme =     {"#94B49F", "#E5E3C9", "#E2F0E7", "#929F97", "#A87D7D", "#B4CFB0"};
             sceneMap.put("intro", createIntroScene(defaultTheme));
+                    applyNewLookGame(defaultTheme);
             // TODO: need to change colors for the gameplay (but cannot restart)
 
             if (hasGameStarted) {
@@ -166,6 +189,8 @@ public class JavaFXTemplate extends Application {
         // Change the look of the intro screen and the gameplay screen w/ the pink-red theme colors
         pinkThemeButton.setOnAction(e -> {
             sceneMap.put("intro", createIntroScene(pinkTheme));
+            applyNewLookGame(pinkTheme);
+
             // TODO: need to change colors for the gameplay (but cannot restart)
 
             if (hasGameStarted) {
@@ -188,7 +213,7 @@ public class JavaFXTemplate extends Application {
         // Declare a game object
         game = new PlaySlip();
 
-        // Done playing the bet card (round)
+        // Done playing the bet card (round)m
         endPause = new PauseTransition(Duration.seconds(3));
         endPause.setOnFinished(e-> {
             primaryStage.setScene(sceneMap.get("ending"));
@@ -222,7 +247,7 @@ public class JavaFXTemplate extends Application {
         Text gameTitle = new Text("KENO");
         gameTitle.setStyle("-fx-font: bold 150 Helvetica;");
 
-        //Customize the buttons (TODO: maybe move the background color to the main method b/c of newlook)
+        //Customize the buttons
         playGameButton.setStyle("-fx-pref-height: 90px; -fx-pref-width: 600px; -fx-font: bold 36 Helvetica; -fx-background-radius: 10; -fx-background-color: " + themeColors[0]);
         menuButton1.setStyle("-fx-pref-height: 55px; -fx-pref-width: 95px; -fx-font: bold 20 Helvetica; -fx-background-radius: 10; -fx-background-color: " + themeColors[0]);
 
@@ -243,8 +268,8 @@ public class JavaFXTemplate extends Application {
 
     public Scene createGameScene() {
 
-        BorderPane pane = new BorderPane();
-        pane.setStyle("-fx-background-color: #E5E3C9");
+        gameBorderpane = new BorderPane();
+        gameBorderpane.setStyle("-fx-background-color: #E5E3C9");
 
         // left components
         betCard = new GridPane();
@@ -258,7 +283,7 @@ public class JavaFXTemplate extends Application {
         startDrawButton.setStyle("-fx-background-color: #A87D7D; -fx-font: bold 15 Helvetica;  -fx-min-width: 240; -fx-text-fill: black; -fx-min-height: 50; -fx-alignment: center; -fx-border-width: 10; -fx-background-radius: 5;");
 
         displayTotalWinningGame = new Text("Winning Game Total: XXX");
-        StackPane displayTotalWinningGameFlow = new StackPane(displayTotalWinningGame);
+        displayTotalWinningGameFlow = new StackPane(displayTotalWinningGame);
         displayTotalWinningGameFlow.setStyle("-fx-background-color: #E2F0E7; -fx-font: bold 15 Helvetica;  -fx-min-width: 480; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
 
 
@@ -271,11 +296,11 @@ public class JavaFXTemplate extends Application {
         leftSide.setMargin(betCard, new Insets(10));
 
         Text formText1 = new Text("Select the Number of Spots to Play");
-        StackPane formText1Pane = new StackPane(formText1);
+        formText1Pane = new StackPane(formText1);
         formText1Pane.setStyle("-fx-background-color: #E2F0E7; -fx-font: bold 15 Helvetica;  -fx-min-width: 80; -fx-min-height: 30; -fx-alignment: center; -fx-border-width: 30;");
 
         Text formText2 = new Text("Select the Number of Drawings");
-        StackPane formText2Pane = new StackPane(formText2);
+        formText2Pane = new StackPane(formText2);
         formText2Pane.setStyle("-fx-background-color: #E2F0E7; -fx-font: bold 15 Helvetica;  -fx-min-width: 80; -fx-min-height: 30; -fx-alignment: center; -fx-border-width: 30;");
 
         submitFormButton = new Button("Submit");
@@ -295,8 +320,8 @@ public class JavaFXTemplate extends Application {
         for (int i = 0; i < 4; i++) {
             RadioButton gridButton1 = new RadioButton(String.valueOf(spotOptions[i]));
             RadioButton gridButton2 = new RadioButton(String.valueOf(i + 1));
-            gridButton1.setStyle("-fx-min-height: 45px; -fx-min-width: 80px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #E2F0E7; -fx-border-color: #B4CFB0; -fx-border-width:5;");
-            gridButton2.setStyle("-fx-min-height: 45px; -fx-min-width: 80px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #E2F0E7; -fx-border-color: #B4CFB0; -fx-border-width:5;");
+            gridButton1.setStyle("-fx-min-height: 45px; -fx-min-width: 80px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-border-color: #B4CFB0; -fx-border-width:5;");
+            gridButton2.setStyle("-fx-min-height: 45px; -fx-min-width: 80px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-border-color: #B4CFB0; -fx-border-width:5;");
             gridButton1.setToggleGroup(group1);
             gridButton2.setToggleGroup(group2);
             spotsToPlay.getChildren().add(gridButton1);
@@ -310,7 +335,7 @@ public class JavaFXTemplate extends Application {
         HBox spotsNdrawings = new HBox(spotsBox, drawingsBox);
         HBox submitBox = new HBox(submitFormButton);
         submitBox.setAlignment(Pos.CENTER);
-        VBox setupForm = new VBox(spotsNdrawings, submitBox);
+        setupForm = new VBox(spotsNdrawings, submitBox);
         setupForm.setStyle("-fx-background-color: #E2F0E7;");
 
 
@@ -321,29 +346,30 @@ public class JavaFXTemplate extends Application {
         submitBox.setMargin(submitFormButton, new Insets(10));
 
         instructionBoard = new Text("Instruction Board");
-        StackPane instructionBoardFlow = new StackPane(instructionBoard);
+        instructionBoardFlow = new StackPane(instructionBoard);
         instructionBoardFlow.setStyle("-fx-background-color: #B4CFB0; -fx-font: bold 15 Helvetica;  -fx-min-width: 240; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
 
         display20RandomNums = new Text("20 Random Numbers");
-        StackPane display20RandomNumsFlow = new StackPane(display20RandomNums);
+        display20RandomNumsFlow = new StackPane(display20RandomNums);
         display20RandomNumsFlow.setStyle("-fx-background-color: #929F97; -fx-font: bold 15 Helvetica;  -fx-min-width: 60; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
 
         displayNumMatches = new Text("Number of matches: XXXXXXX");
         displayNumMatches.setWrappingWidth(200);
         displayNumMatches.setTextAlignment(TextAlignment.CENTER);
-        StackPane displayNumMatchesFlow = new StackPane(displayNumMatches);
+        displayNumMatchesFlow = new StackPane(displayNumMatches);
         displayNumMatchesFlow.setStyle("-fx-background-color: #E2F0E7; -fx-border-insets:20; -fx-font: bold 15 Helvetica;  -fx-min-width: 160; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
 
         displayMatchedNums = new Text("Numbers matched: XXXXXXX");
         displayMatchedNums.setWrappingWidth(200);
         displayMatchedNums.setTextAlignment(TextAlignment.CENTER);
-        StackPane displayMatchedNumsFlow = new StackPane(displayMatchedNums);
+        displayMatchedNumsFlow = new StackPane(displayMatchedNums);
         displayMatchedNumsFlow.setStyle("-fx-background-color: #E2F0E7;  -fx-border-insets:20; -fx-font: bold 15 Helvetica;  -fx-min-width: 160; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
 
         displayDrawWinning = new Text("Current Draw Winnings: XXXXXXX");
         displayDrawWinning.setWrappingWidth(200);
         displayDrawWinning.setTextAlignment(TextAlignment.CENTER);
-        StackPane displayDrawWinningFlow = new StackPane(displayDrawWinning);
+
+        displayDrawWinningFlow = new StackPane(displayDrawWinning);
         displayDrawWinningFlow.setStyle("-fx-background-color: #E2F0E7;  -fx-border-insets:20; -fx-font: bold 15 Helvetica;  -fx-min-width: 160; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
 
         // right arrangement
@@ -364,16 +390,16 @@ public class JavaFXTemplate extends Application {
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 10; col++) {
                 ToggleButton gridButton = new ToggleButton(String.valueOf(count)); // switched type from Button to Toggle Button
-                gridButton.setStyle("-fx-min-height: 45px; -fx-min-width: 50px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #E2F0E7; -fx-border-color: #B4CFB0; -fx-border-width:5;");
+                gridButton.setStyle("-fx-min-height: 45px; -fx-min-width: 50px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #E2F0E7; -fx-border-color:" +gridButtonBorder+ "; -fx-border-width:5;");
                 betCard.add(gridButton, col, row, 1, 1);
                 arrayOfGridButtons.add(gridButton);
                 gridButton.setDisable(true);
                 gridButton.setOnAction(e -> {
                     if (gridButton.isSelected()) {
-                        gridButton.setStyle("-fx-min-height: 45px; -fx-min-width: 50px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #88998E; -fx-border-color: #B4CFB0; -fx-border-width:5;");
+                        gridButton.setStyle("-fx-min-height: 45px; -fx-min-width: 50px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #88998E; -fx-border-color:"+gridButtonBorder+"; -fx-border-width:5;");
                         game.addSpotNum(Integer.valueOf(gridButton.getText()));
                     } else {
-                        gridButton.setStyle("-fx-min-height: 45px; -fx-min-width: 50px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #E2F0E7; -fx-border-color: #B4CFB0; -fx-border-width:5;");
+                        gridButton.setStyle("-fx-min-height: 45px; -fx-min-width: 50px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #E2F0E7; -fx-border-color: "+gridButtonBorder+"; -fx-border-width:5;");
                         game.removeSpotNum(Integer.valueOf(gridButton.getText()));
                     }
                 });
@@ -381,16 +407,15 @@ public class JavaFXTemplate extends Application {
             }
         }
 
-
         HBox gameBoard = new HBox(leftSide, rightSide);
         gameBoard.setAlignment(Pos.CENTER);
 
-        pane.setCenter(gameBoard);
-        pane.setMargin(gameBoard, new Insets(100));
+        gameBorderpane.setCenter(gameBoard);
+        gameBorderpane.setMargin(gameBoard, new Insets(100));
 
         // Scroll through the whole scene's contents
         ScrollPane scroll = new ScrollPane();
-        scroll.setContent(pane);
+        scroll.setContent(gameBorderpane);
         scroll.setFitToHeight(true);
         scroll.setFitToWidth(true);
 
@@ -402,11 +427,11 @@ public class JavaFXTemplate extends Application {
             instructionBoard.setText("We have chosen the numbers on the bet card for you...");
             for (int i = 0; i < 80; i++) {
                 if (arrayOfGridButtons.get(i).isSelected() == true && !(game.getSelectedSpots().contains(Integer.valueOf(arrayOfGridButtons.get(i).getText())))) {
-                    arrayOfGridButtons.get(i).setStyle("-fx-min-height: 45px; -fx-min-width: 50px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #E2F0E7; -fx-border-color: #B4CFB0; -fx-border-width:5;");
+                    arrayOfGridButtons.get(i).setStyle("-fx-min-height: 45px; -fx-min-width: 50px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #E2F0E7; -fx-border-color: "+gridButtonBorder+";  -fx-border-width:5;");
                     game.removeSpotNum(Integer.valueOf(arrayOfGridButtons.get(i).getText()));
                     arrayOfGridButtons.get(i).setSelected(false);
                 } else if (arrayOfGridButtons.get(i).isSelected() == false && game.getSelectedSpots().contains(Integer.valueOf(arrayOfGridButtons.get(i).getText()))) {
-                    arrayOfGridButtons.get(i).setStyle("-fx-min-height: 45px; -fx-min-width: 50px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #88998E; -fx-border-color: #B4CFB0; -fx-border-width:5;");
+                    arrayOfGridButtons.get(i).setStyle("-fx-min-height: 45px; -fx-min-width: 50px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #88998E; -fx-border-color: "+gridButtonBorder+";  -fx-border-width:5;");
                     arrayOfGridButtons.get(i).setSelected(true);
                 }
             }
@@ -847,7 +872,52 @@ public class JavaFXTemplate extends Application {
         return new Scene(pane, 850, 750);
     }
 
-    public void applyNewLook(ArrayList<String> themeStyle) {
+    // this function will be called by the start method (event handlers for the green and pink)
+    // have to make the game variables global
+
+
+
+    // green
+    // beige
+    // super light green
+    // grey
+    // reddish brown
+    // light green for the grid and the instruction board
+
+    public void applyNewLookGame(String[] themeStyle) {
+        gridButtonBorder = themeStyle[0];
+        gameBorderpane.setStyle("-fx-background-color: " + themeStyle[1]);
+        quickPickButton.setStyle("-fx-background-color: " + themeStyle[4] + "; -fx-font: bold 15 Helvetica;  -fx-min-width: 240; -fx-min-height: 50; -fx-text-fill: black;");
+        startDrawButton.setStyle("-fx-background-color:" + themeStyle[4] + "; -fx-font: bold 15 Helvetica;  -fx-min-width: 240; -fx-text-fill: black; -fx-min-height: 50; -fx-alignment: center; -fx-border-width: 10; -fx-background-radius: 5;");
+        displayTotalWinningGameFlow.setStyle("-fx-background-color:" + themeStyle[2]+ ";  -fx-font: bold 15 Helvetica;  -fx-min-width: 480; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
+        formText1Pane.setStyle("-fx-background-color: " + themeStyle[2]+"; -fx-font: bold 15 Helvetica;  -fx-min-width: 80; -fx-min-height: 30; -fx-alignment: center; -fx-border-width: 30;");
+        formText2Pane.setStyle("-fx-background-color: " + themeStyle[2]+"; -fx-font: bold 15 Helvetica;  -fx-min-width: 80; -fx-min-height: 30; -fx-alignment: center; -fx-border-width: 30;");
+        menuButton2.setStyle("-fx-pref-height: 55px; -fx-pref-width: 95px; -fx-font: bold 20 Helvetica; -fx-background-radius: 10; -fx-background-color:" + themeStyle[0]);
+        setupForm.setStyle("-fx-background-color:" + themeStyle[2]);
+        instructionBoardFlow.setStyle("-fx-background-color:" + themeStyle[2]+"; -fx-font: bold 15 Helvetica;  -fx-min-width: 240; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
+        display20RandomNumsFlow.setStyle("-fx-background-color:" + themeStyle[3]+"; -fx-font: bold 15 Helvetica;  -fx-min-width: 60; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
+        displayNumMatchesFlow.setStyle("-fx-background-color:" + themeStyle[2]+"; -fx-border-insets:20; -fx-font: bold 15 Helvetica;  -fx-min-width: 160; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
+        displayMatchedNumsFlow.setStyle("-fx-background-color:" + themeStyle[2]+"; -fx-border-insets:20; -fx-font: bold 15 Helvetica;  -fx-min-width: 160; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
+        displayDrawWinningFlow.setStyle("-fx-background-color:" + themeStyle[2]+ "; -fx-border-insets:20; -fx-font: bold 15 Helvetica;  -fx-min-width: 160; -fx-min-height: 100; -fx-alignment: center; -fx-border-width: 30; -fx-background-radius: 5;");
+        menuButton2.setStyle("-fx-pref-height: 55px; -fx-pref-width: 95px; -fx-font: bold 20 Helvetica; -fx-background-radius: 10; -fx-background-color: " + themeStyle[0] + ";");
+        submitFormButton.setStyle("-fx-pref-height: 20px; -fx-pref-width: 95px; -fx-font: bold 15 Helvetica; -fx-background-color:" + themeStyle[4] + ";");
+
+        for (int i = 0; i < arrayOfFormButtons.size(); i++){
+            arrayOfFormButtons.get(i).setStyle("-fx-min-height: 45px; -fx-min-width: 80px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-border-color:"+gridButtonBorder+";-fx-border-width:5;");
+        }
+
+        for (int i = 0; i < arrayOfGridButtons.size(); i++){
+
+            if (arrayOfGridButtons.get(i).isSelected()) {
+                arrayOfGridButtons.get(i).setStyle("-fx-min-height: 45px; -fx-min-width: 50px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #88998E; -fx-border-color:"+gridButtonBorder+";-fx-border-width:5;");
+            } else {
+                arrayOfGridButtons.get(i).setStyle("-fx-min-height: 45px; -fx-min-width: 50px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #E2F0E7; -fx-border-color:"+gridButtonBorder+";-fx-border-width:5;");
+            }
+        }
+
+        // Each theme style contains the colors' hex codes
+
+        // change all the colors of the variables that have colors associated with it
     }
 
     public void applyNewLook(String[] themeStyle) {
