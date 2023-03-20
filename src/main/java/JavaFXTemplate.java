@@ -156,7 +156,7 @@ public class JavaFXTemplate extends Application {
         });
 
         // Declare a pause to transition from the gameplay scene to the ending scene after the player is done drawing
-        endPause = new PauseTransition(Duration.seconds(3));
+        endPause = new PauseTransition(Duration.seconds(25));
 
         // Once the pause is completed, switch to the ending scene
         endPause.setOnFinished(e -> {
@@ -368,9 +368,23 @@ public class JavaFXTemplate extends Application {
 
 
         // EVENT HANDLERS FOR LEFT COMPONENTS:
-        PauseTransition pause = new PauseTransition(Duration.seconds(2));
+        PauseTransition pause = new PauseTransition(Duration.seconds(21));
         pause.setOnFinished(t -> {
+            // If the player play their last draw, keep the start draw button disabled
+            // Otherwise, enable the start draw button
+            startDrawButton.setDisable(game.checkDrawsCompleted());
+
             System.out.println("Program Paused...");
+
+            displayNumMatches.setText("Number of matches:\n" + game.getNumMatches());
+            displayMatchedNums.setTextAlignment(TextAlignment.CENTER);
+            displayMatchedNums.setText(game.getMatchesString());
+            displayMatchedNums.setTextAlignment(TextAlignment.CENTER);
+            displayDrawWinning.setText("Current draw winnings:\n$" + game.getDrawWinningMoney());
+            displayDrawWinning.setTextAlignment(TextAlignment.CENTER);
+            displayTotalWinningGame.setText("Total Game Winnings:\n$" + game.getTotalGameWinningMoney());
+            displayTotalWinningGame.setTextAlignment(TextAlignment.CENTER);
+            startDrawButton.setText("Start Draw No: " + game.getCurrentDrawNum());
         });
 
         // The program will randomly select the spot numbers from the grid for the player if the quickpick button is clicked
@@ -418,6 +432,7 @@ public class JavaFXTemplate extends Application {
             }
         });
 
+
         startDrawButton.setOnAction(e -> {
             if (game.checkNumSpots()) {
                 // Disable left buttons and also bet card
@@ -427,39 +442,30 @@ public class JavaFXTemplate extends Application {
                 }
 
                 // update instructions and begin new draw
-                instructionBoard.setText("Loading...");
-                pause.play();
+//                instructionBoard.setText("Loading...");
+//                pause.play();
                 instructionBoard.setText("You have " + (game.getNumDrawings() - game.getCurrentDrawNum()) + " draws left.");
                 game.newDraw();
 
                 // update all results boards
-//                timelineCounter=0;
-//                ArrayList<Integer> generatedRandNums = game.get20RandNumArrayList();
-//                display20RandomNums.setText("Here are the 20 random generated numbers:\n");
-//                display20RandomNums.setText(display20RandomNums.getText() + generatedRandNums.get(0));
-//                display20RandomNums.setTextAlignment(TextAlignment.CENTER);
-//                Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), x -> {
-//                    display20RandomNums.setText(display20RandomNums.getText() + ", " + generatedRandNums.get(timelineCounter));
-//                    display20RandomNums.setTextAlignment(TextAlignment.CENTER);
-//                    timelineCounter++;
-//                }));
-//                timeline.setCycleCount(generatedRandNums.size() - 1);
-//                timeline.playFromStart();
-//                pause.play();
-//                pause.play();
-
-                display20RandomNums.setText(game.get20RandNumString());
+                // the first number in the random list is printed out.
+                timelineCounter = 1;
+                ArrayList<Integer> generatedRandNums = game.get20RandNumArrayList();
+                display20RandomNums.setText("Here are the 20 random generated numbers:\n");
+                display20RandomNums.setText(display20RandomNums.getText() + generatedRandNums.get(0));
                 display20RandomNums.setTextAlignment(TextAlignment.CENTER);
-                displayNumMatches.setText("Number of matches:\n" + game.getNumMatches());
-                displayMatchedNums.setTextAlignment(TextAlignment.CENTER);
-                displayMatchedNums.setText(game.getMatchesString());
-                displayMatchedNums.setTextAlignment(TextAlignment.CENTER);
-                displayDrawWinning.setText("Current draw winnings:\n$" + game.getDrawWinningMoney());
-                displayDrawWinning.setTextAlignment(TextAlignment.CENTER);
-                displayTotalWinningGame.setText("Total Game Winnings:\n$" + game.getTotalGameWinningMoney());
-                displayTotalWinningGame.setTextAlignment(TextAlignment.CENTER);
-                startDrawButton.setText("Start Draw No: " + game.getCurrentDrawNum());
-//                startDrawButton.setDisable(false);
+                startDrawButton.setDisable(true);
+
+                // the timeline adds a pause after each random number is printed out.
+                Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), x -> {
+                    display20RandomNums.setText(display20RandomNums.getText() + ", " + generatedRandNums.get(timelineCounter));
+                    display20RandomNums.setTextAlignment(TextAlignment.CENTER);
+                    timelineCounter++;
+                }));
+                timeline.setCycleCount(generatedRandNums.size() - 1);
+                timeline.playFromStart();
+                pause.play();
+
             } else {
                 if (game.getNumSelectedSpots() > game.getNumSpots()) {
                     instructionBoard.setText("Oops! You chose too many spots. Please select only " + game.getNumSpots() + ".");
