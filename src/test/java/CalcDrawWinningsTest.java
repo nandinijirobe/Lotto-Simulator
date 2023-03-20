@@ -1,3 +1,4 @@
+// This class contains the test cases for the CalculateDrawWinningMoneyClass
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

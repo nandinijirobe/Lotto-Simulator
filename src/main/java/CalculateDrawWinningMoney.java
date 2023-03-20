@@ -1,3 +1,7 @@
+/* This class contains the logic to caluclate all the game winnings based on
+ * the number of selected number of spots and matched numbers. This assists the
+ * PlaySlip class */
+
 // Return the amount of money the player won based on the number of matches and spots (1, 4, 8, 10) they play per draw
 public class CalculateDrawWinningMoney {
     // Return the amount of money the player wins based on the number of the matches they get from a single draw in a 1 Spot Game

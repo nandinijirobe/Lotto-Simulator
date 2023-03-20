@@ -1,3 +1,16 @@
+/*
+//  --------------PROJECT DESCRIPTION-------------  //
+
+Program 2: Lottery Simulation Game
+Course: CS 342, Spring 2023
+Author: Nandini Jirobe and Flora Huang
+
+About the program:
+  This is a lottery simulation game. The logic for this
+  game is built in the PlaySlip class.
+------------------------------------------------
+*/
+
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -432,7 +445,6 @@ public class JavaFXTemplate extends Application {
             }
         });
 
-
         startDrawButton.setOnAction(e -> {
             if (game.checkNumSpots()) {
                 // Disable left buttons and also bet card
@@ -442,8 +454,6 @@ public class JavaFXTemplate extends Application {
                 }
 
                 // update instructions and begin new draw
-//                instructionBoard.setText("Loading...");
-//                pause.play();
                 instructionBoard.setText("You have " + (game.getNumDrawings() - game.getCurrentDrawNum()) + " draws left.");
                 game.newDraw();
 

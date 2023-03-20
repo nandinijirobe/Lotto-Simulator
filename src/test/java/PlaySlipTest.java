@@ -1,3 +1,5 @@
+// This class contains the test cases for the PlaySlip class.
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

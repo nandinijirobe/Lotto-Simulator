@@ -1,3 +1,5 @@
+// This class includes the game logic
+
 import java.util.*;
 
 public class PlaySlip {
@@ -200,14 +202,14 @@ public class PlaySlip {
         return numberlist;
     }
 
-    public String get20RandNumString(){
-        ArrayList<Integer>numberlist = new ArrayList<>(random20Numbers);
+    public String get20RandNumString() {
+        ArrayList<Integer> numberlist = new ArrayList<>(random20Numbers);
         Collections.sort(numberlist);
         String numbers = "Here are the 20 random generated numbers:\n";
-        for(int i = 0; i < numberlist.size()-1; i++){
-            numbers += String.valueOf(numberlist.get(i)) + ", ";
+        for (int i = 0; i < numberlist.size() - 1; i++) {
+            numbers += numberlist.get(i) + ", ";
         }
-        numbers += String.valueOf(numberlist.get(numberlist.size()-1));
+        numbers += String.valueOf(numberlist.get(numberlist.size() - 1));
         return numbers;
     }
 
