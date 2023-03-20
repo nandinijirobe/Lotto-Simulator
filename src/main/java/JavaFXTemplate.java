@@ -509,7 +509,7 @@ public class JavaFXTemplate extends Application {
             // Restart the grid
             for (int i = 0; i < 80; i++) {
                 if (arrayOfGridButtons.get(i).isSelected()) {
-                    arrayOfGridButtons.get(i).setStyle("-fx-min-height: 45px; -fx-min-width: 50px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #E2F0E7; -fx-border-color: #B4CFB0; -fx-border-width:5;");
+                    arrayOfGridButtons.get(i).setStyle("-fx-min-height: 45px; -fx-min-width: 50px; -fx-background-radius: 1;-fx-font: bold 15 Helvetica; -fx-background-color: #E2F0E7; -fx-border-color:"+gridButtonBorder+";-fx-border-width:5;");
                     game.removeSpotNum(Integer.valueOf(arrayOfGridButtons.get(i).getText()));
                     arrayOfGridButtons.get(i).setSelected(false);
                 }
